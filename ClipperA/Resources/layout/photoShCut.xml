@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<FrameLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="fill_parent"
+ android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:id="@+id/img"/>
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/outline_check_circle_24"
+        android:layout_marginLeft="98dp"
+        android:visibility="invisible"
+        android:id="@+id/imgSelected"/>
+
+</FrameLayout>

@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/postItem" >
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:orientation="horizontal">
+    <com.github.abdularis.civ.CircleImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/userIcon"
+        android:contentDescription="userIcon"
+        android:contextClickable="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        app:autoSizeMinTextSize="30dp"
+        android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
+            android:textColor="#000000"
+        android:id="@+id/userName"
+       />
+        </LinearLayout>
+    <androidx.viewpager.widget.ViewPager
+           android:layout_width="match_parent"
+           android:layout_height="400dp"
+        android:id="@+id/vwPager"
+        >
+    <android.support.v4.view.PagerTabStrip
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      android:textColor="#000000" />
+    </androidx.viewpager.widget.ViewPager>
+     
+    <!--<ImageView
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"     
+        android:id="@+id/postImage"
+        android:contentDescription="Image" 
+        />-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/txtBelow"
+        app:autoSizeMinTextSize="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
+        <!--dislike-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal">
+       
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="left"
+                android:src="@drawable/outline_thumb_down_24"
+                android:id="@+id/dislike">
+            </ImageView>
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:textAlignment="center"
+                android:id="@+id/reactionDown"
+                android:paddingLeft="100dp" />
+        </LinearLayout>
+    
+        <!--comment-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+        
+           <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/outline_chat_bubble_outline_24">
+           </ImageView>
+           <TextView
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                app:autoSizeMinTextSize="26dp"
+                android:textAlignment="center"
+                android:id="@+id/cmnt"/>
+        </LinearLayout>
+
+        <!--like-->
+         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+             android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="right"
+                android:src="@drawable/outline_favorite_24"
+                android:id="@+id/like"/>
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                app:autoSizeMinTextSize="26dp"
+                android:textAlignment="center"
+                android:id="@+id/reactionUp"/>
+         </LinearLayout>
+  </RelativeLayout>
+</LinearLayout>

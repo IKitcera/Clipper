@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.github.abdularis.civ.CircleImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/profileIcon"
+            android:contentDescription="userIcon"
+            android:contextClickable="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="UserName"
+                android:layout_gravity="top"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:fontFamily="serif"
+                android:id="@+id/profileUserName" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="Posts"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"
+                        android:fontFamily="serif" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="0"
+                        android:textColor="#000000"
+                        android:fontFamily="serif"
+                        android:layout_gravity="center"
+                        android:id="@+id/profilePostsCount" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="Subscribers"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"
+                        android:fontFamily="serif"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="0"
+                        android:textColor="#000000"
+                        android:fontFamily="serif"
+                        android:layout_gravity="center"
+                        android:id="@+id/profileSubscribers" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="Subscribings"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"
+                        android:fontFamily="serif" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="0"
+                        android:layout_gravity="center"
+                        android:textColor="#000000"
+                        android:fontFamily="serif"
+                        android:id="@+id/profileSubscribings" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                 android:paddingLeft="25dp"
+                android:textColor="#000000"
+                android:fontFamily="serif"
+                android:id="@+id/profileAbouUser" />
+        </LinearLayout>
+    </LinearLayout>
+     
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="160dp"
+            android:id="@+id/profilePosts"/>
+ 
+        <!--<ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="160dp"
+        
+        android:id="@+id/profilePosts"/>-->
+   
+</RelativeLayout>

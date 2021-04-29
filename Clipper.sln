@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clipper", "Clipper\Clipper.csproj", "{B40D6A4D-48D7-41A7-B86C-8458E98CA9CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipperA", "ClipperA\ClipperA.csproj", "{785E2082-E5AB-4CCA-93BD-534053268D63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B40D6A4D-48D7-41A7-B86C-8458E98CA9CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B40D6A4D-48D7-41A7-B86C-8458E98CA9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B40D6A4D-48D7-41A7-B86C-8458E98CA9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B40D6A4D-48D7-41A7-B86C-8458E98CA9CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{785E2082-E5AB-4CCA-93BD-534053268D63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{785E2082-E5AB-4CCA-93BD-534053268D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{785E2082-E5AB-4CCA-93BD-534053268D63}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{785E2082-E5AB-4CCA-93BD-534053268D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{785E2082-E5AB-4CCA-93BD-534053268D63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{785E2082-E5AB-4CCA-93BD-534053268D63}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DC67A2D2-ACA8-4DFF-BBF0-99F69EA2B39F}
+	EndGlobalSection
+EndGlobal

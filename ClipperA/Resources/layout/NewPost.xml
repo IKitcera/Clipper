@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RelativeLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Add new post"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        android:textSize="18dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+        <TextView
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:text="Gallery"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        android:layout_alignParentStart="true"
+        android:textSize="16dp"/>
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp" 
+            android:background="@drawable/outline_auto_awesome_motion_24"
+            android:layout_centerInParent="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="80dp"
+            android:tooltipText="Choose few photos"
+            android:id="@+id/fewPictures"/>
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp" 
+            android:background="@drawable/outline_photo_camera_24"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/takePictureBtn"/>
+         <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp" 
+            android:background="@drawable/outline_done_24"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:visibility="invisible"
+            android:id="@+id/doneBtn"/>
+    </RelativeLayout>
+
+    <!--<RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+         <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"      
+        android:id="@+id/gPhotos"/>
+    </RelativeLayout>-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recView"/>
+    </RelativeLayout>
+    
+</RelativeLayout>
