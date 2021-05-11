@@ -13,7 +13,6 @@ namespace ClipperIOS
         UserSettings settings;
         public LoginViewController(IntPtr handle) : base(handle)
         {
-            
         }
 
         public override void DidReceiveMemoryWarning()
@@ -30,7 +29,7 @@ namespace ClipperIOS
         {
             loginViewModel = new LoginViewModel();
             settings = new UserSettings();
-
+            
             if (settings.GetDoNotLogOut())
             {
                 if (settings.GetUserID() != "")
@@ -44,7 +43,7 @@ namespace ClipperIOS
                    // Finish();
                 }
             }
-
+            errorLabel.Hidden = true;
             base.ViewDidLoad();
 
 
@@ -76,38 +75,39 @@ namespace ClipperIOS
         #region Methods
         public void LoginClick()
         {
-            //loginViewModel.Email = FindViewById<EditText>(Resource.Id.Uemail).Text;
-            //login.Password = FindViewById<EditText>(Resource.Id.Upassword).Text;
+            loginViewModel.Email = uEmail.Text;
+            loginViewModel.Password =uPass.Text;
 
-            //var userId = login.TryLogin();
-            //if (userId != "")
-            //{
-            //    //Intent intent = new Intent(this, typeof(MainActivity));
-            //    //Bundle bundle = new Bundle();
-            //    //intent.PutExtra("userId", userId);
+            var userId = loginViewModel.TryLogin();
+            if (userId != "")
+            {
+                //    //Intent intent = new Intent(this, typeof(MainActivity));
+                //    //Bundle bundle = new Bundle();
+                //    //intent.PutExtra("userId", userId);
 
-            //    var cb = FindViewById<CheckBox>(Resource.Id.logoutCB);
+                var cb = doNotLogout;
 
-            //    settings.saveUserLogin(login.Email);
-            //    settings.saveUserPassword(login.Password);
-            //    settings.saveUserID(userId);
+                settings.saveUserLogin(loginViewModel.Email);
+                    settings.saveUserPassword(loginViewModel.Password);
+                    settings.saveUserID(userId);
 
-            //    if (FindViewById<CheckBox>(Resource.Id.logoutCB).Checked)
-            //    {
-            //        settings.DoNotLogOut(true);
-            //    }
+                    if (cb.On)
+                    {
+                        settings.DoNotLogOut(true);
+                    }
 
-            //    //StartActivity(intent);
+                //    //StartActivity(intent);
 
-            //    StartActivity(typeof(MainActivity));
-            //    Finish();
-            //}
-            //else
-            //{
-            //    FindViewById<TextView>(Resource.Id.lgnError).Visibility = ViewStates.Visible;
-            //    FindViewById<TextView>(Resource.Id.lgnError).Text = login.Message;
-            //}
+                //    StartActivity(typeof(MainActivity));
+                //    Finish();
+                }
+                else
+                {
+                    errorLabel.Text = loginViewModel.Message;
+                    errorLabel.Hidden = false;
+                   
+                }
+            }
+            #endregion
         }
-        #endregion
-    }
 }

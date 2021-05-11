@@ -1,10 +1,14 @@
 ﻿using System;
+using UIKit;
+using Foundation;
 namespace ClipperIOS
 {
-    public class LoginView
+    [Register("LoginView")]
+    public class LoginView:UIView
     {
         public LoginView()
         {
+            
         }
     }
 }

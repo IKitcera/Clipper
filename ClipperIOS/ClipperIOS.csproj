@@ -78,7 +78,8 @@
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
-    <InterfaceDefinition Include="LoginViewcontroller.storyboard" />
+    <InterfaceDefinition Include="Login.storyboard" />
+    <Compile Include="LoginView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FirstViewController.cs" />
@@ -164,6 +165,9 @@
       <Project>{b40d6a4d-48d7-41a7-b86c-8458e98ca9cf}</Project>
       <Name>Clipper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Login\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
