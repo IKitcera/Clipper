@@ -75,10 +75,12 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="SceneDelegate.cs" />
     <Compile Include="UserSettings.cs" />
+    <InterfaceDefinition Include="CameraStoryboard.storyboard" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
     <InterfaceDefinition Include="LoginViewcontroller.storyboard" />
+    <InterfaceDefinition Include="LoginStoryboard.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FirstViewController.cs" />
