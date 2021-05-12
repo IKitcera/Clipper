@@ -36,8 +36,8 @@ namespace ClipperIOS
                 {
 
                     //NEW CONTROLLER
-                  //  var nSWindowController = storyboard.InstantiateControllerWithIdentifier("MainWindow") as NSWindowController;
-
+                    var nSWindowController = Storyboard.InstantiateViewController("MainWindow");
+              
                     //check
                   //  StartActivity(typeof(MainActivity));
                    // Finish();

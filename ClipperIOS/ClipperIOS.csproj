@@ -67,13 +67,16 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="LoginDelegate.cs" />
     <Compile Include="LoginViewController.cs" />
     <Compile Include="LoginViewController.designer.cs">
       <DependentUpon>LoginViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="MainFlowViewController.cs" />
+    <Compile Include="MainTabNavViewController.cs" />
+    <Compile Include="NewPostViewController.cs" />
+    <Compile Include="ProfileViewController.cs" />
     <Compile Include="SceneDelegate.cs" />
     <Compile Include="UserSettings.cs" />
     <InterfaceDefinition Include="CameraStoryboard.storyboard" />
@@ -81,7 +84,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
     <InterfaceDefinition Include="Login.storyboard" />
-    <Compile Include="LoginView.cs" />
+    <BundleResource Include="Resources\icons\outline_home_black_24pt.imageset\Contents.json" />
+    <BundleResource Include="Resources\icons\outline_add_black_24pt.imageset\Contents.json" />
+    <BundleResource Include="Resources\icons\outline_person_outline_black_24pt.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FirstViewController.cs" />
@@ -161,6 +166,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entitlements.plist" />
+    <BundleResource Include="Resources\icons\outline_home_black_24pt.imageset\outline_home_black_24pt_1x.png" />
+    <BundleResource Include="Resources\icons\outline_home_black_24pt.imageset\outline_home_black_24pt_2x.png" />
+    <BundleResource Include="Resources\icons\outline_home_black_24pt.imageset\outline_home_black_24pt_3x.png" />
+    <BundleResource Include="Resources\icons\outline_add_black_24pt.imageset\outline_add_black_24pt_1x.png" />
+    <BundleResource Include="Resources\icons\outline_add_black_24pt.imageset\outline_add_black_24pt_2x.png" />
+    <BundleResource Include="Resources\icons\outline_add_black_24pt.imageset\outline_add_black_24pt_3x.png" />
+    <BundleResource Include="Resources\icons\outline_person_outline_black_24pt.imageset\outline_person_outline_black_24pt_1x.png" />
+    <BundleResource Include="Resources\icons\outline_person_outline_black_24pt.imageset\outline_person_outline_black_24pt_2x.png" />
+    <BundleResource Include="Resources\icons\outline_person_outline_black_24pt.imageset\outline_person_outline_black_24pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Clipper\Clipper.csproj">
