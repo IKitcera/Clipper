@@ -7,10 +7,11 @@ using UIKit;
 
 namespace ClipperIOS
 {
-    class MainTabNavViewController : UITabBarController
+    [Register("MainTabNavController")]
+    class MainTabNavController : UITabBarController
     {
         UIViewController mainFlowTab, newPostTab, profileTab;
-        public MainTabNavViewController()
+        public MainTabNavController()
         {
             mainFlowTab = new UIViewController();
             mainFlowTab.TabBarItem = new UITabBarItem("Home", new UIImage("Resource/icons/outline_home_black_24pt.imageset/outline_home_black_24pt.2x.png"), 0);
