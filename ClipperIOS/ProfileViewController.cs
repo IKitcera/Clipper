@@ -7,7 +7,12 @@ using UIKit;
 
 namespace ClipperIOS
 {
-    class ProfileViewController : UIViewController
+    [Register("ProfileViewController")]
+    public class ProfileViewController : UIViewController
     {
+        public ProfileViewController(IntPtr handle) : base(handle)
+        {
+
+        }
     }
 }

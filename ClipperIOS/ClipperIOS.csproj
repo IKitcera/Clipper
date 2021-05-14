@@ -90,14 +90,6 @@
     <BundleResource Include="Resources\icons\outline_person_outline_black_24pt.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FirstViewController.cs" />
-    <Compile Include="FirstViewController.designer.cs">
-      <DependentUpon>FirstViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SecondViewController.cs" />
-    <Compile Include="SecondViewController.designer.cs">
-      <DependentUpon>SecondViewController.cs</DependentUpon>
-    </Compile>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>

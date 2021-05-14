@@ -7,7 +7,12 @@ using UIKit;
 
 namespace ClipperIOS
 {
-    class NewPostViewController : UIViewController
+    [Register("NewPostViewController")]
+    public class NewPostViewController : UIViewController
     {
+        public NewPostViewController(IntPtr handle) : base(handle)
+        { 
+
+        }
     }
 }
