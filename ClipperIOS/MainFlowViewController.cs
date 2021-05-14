@@ -7,6 +7,7 @@ using UIKit;
 
 namespace ClipperIOS
 {
+    [Register("MainFlowController")]
     class MainFlowViewController :  UIViewController
     {
     }
