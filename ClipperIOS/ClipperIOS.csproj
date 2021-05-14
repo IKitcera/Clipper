@@ -88,6 +88,9 @@
     <BundleResource Include="Resources\icons\outline_home_black_24pt.imageset\Contents.json" />
     <BundleResource Include="Resources\icons\outline_add_black_24pt.imageset\Contents.json" />
     <BundleResource Include="Resources\icons\outline_person_outline_black_24pt.imageset\Contents.json" />
+    <Compile Include="MainFlowViewController.designer.cs">
+      <DependentUpon>MainFlowViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">

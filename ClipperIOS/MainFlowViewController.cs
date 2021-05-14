@@ -1,4 +1,4 @@
-﻿using Foundation;
+using Foundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using UIKit;
 namespace ClipperIOS
 {
     [Register("MainFlowViewController")]
-    public class MainFlowViewController :  UIViewController
+    public partial class MainFlowViewController :  UIViewController
     {
         public MainFlowViewController(IntPtr handle):base(handle)
         {
