@@ -78,6 +78,7 @@
     <Compile Include="MainFlowViewController.cs" />
     <Compile Include="MainTabNavController.cs" />
     <Compile Include="NewPostViewController.cs" />
+    <Compile Include="PostsTableSource.cs" />
     <Compile Include="ProfileViewController.cs" />
     <Compile Include="SceneDelegate.cs" />
     <Compile Include="UserSettings.cs" />
@@ -158,6 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.SDWebImage">
+      <Version>4.4.7</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entitlements.plist" />
