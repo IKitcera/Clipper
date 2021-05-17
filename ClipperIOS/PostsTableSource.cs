@@ -43,13 +43,15 @@ namespace ClipperIOS
             var nick = nicks[indexPath.Row];
             var post = posts[indexPath.Row];
 
-            List<>
+          //  List<UIImage> images = new List<UIImage>();
+
             foreach(var img in post.Images)
             {
-                var image = ImgFromUrl(img);
+              //  images.Add(ImgFromUrl(img));
             }
+            //cell.avtr = ]
+            return cell;
             
-            wc.DownloadFile()
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
