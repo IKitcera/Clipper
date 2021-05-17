@@ -36,7 +36,7 @@ namespace ClipperIOS
                 {
 
                     //NEW CONTROLLER
-                    var nSWindowController = Storyboard.InstantiateViewController("MainWindow");
+                    var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
                     PresentViewController(nSWindowController, true, null);
                     RemoveFromParentViewController();
                     //check
@@ -102,7 +102,7 @@ namespace ClipperIOS
                         settings.DoNotLogOut(true);
                     }
 
-                var nSWindowController = Storyboard.InstantiateViewController("MainWindow");
+                var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
                 PresentViewController(nSWindowController, true, null);
                 RemoveFromParentViewController();
 
