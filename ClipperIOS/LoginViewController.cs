@@ -24,11 +24,11 @@ namespace ClipperIOS
         }
 
         #region View lifecycle
-
         public override void ViewDidLoad()
         {
             loginViewModel = new LoginViewModel();
             settings = new UserSettings();
+            loginBtn.TouchUpInside += (sender, e) => LoginClick();
             
             if (settings.GetDoNotLogOut())
             {
@@ -37,11 +37,17 @@ namespace ClipperIOS
 
                     //NEW CONTROLLER
                     var nSWindowController = Storyboard.InstantiateViewController("MainWindow");
-              
+                    PresentViewController(nSWindowController, true, null);
+                    RemoveFromParentViewController();
                     //check
                   //  StartActivity(typeof(MainActivity));
                    // Finish();
                 }
+            }
+            else
+            {
+                uEmail.Text = settings.GetUserLogin();
+                uPass.Text = settings.GetUserPassword();
             }
             errorLabel.Hidden = true;
             base.ViewDidLoad();
@@ -96,11 +102,15 @@ namespace ClipperIOS
                         settings.DoNotLogOut(true);
                     }
 
+                var nSWindowController = Storyboard.InstantiateViewController("MainWindow");
+                PresentViewController(nSWindowController, true, null);
+                RemoveFromParentViewController();
+
                 //    //StartActivity(intent);
 
                 //    StartActivity(typeof(MainActivity));
                 //    Finish();
-                }
+            }
                 else
                 {
                     errorLabel.Text = loginViewModel.Message;
