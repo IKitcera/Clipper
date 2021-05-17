@@ -89,6 +89,7 @@
                         <outlet property="loginBtn" destination="LUl-bB-pEQ" id="Wi6-7n-AuH"/>
                         <outlet property="uEmail" destination="YNW-eJ-De6" id="tim-P0-u7J"/>
                         <outlet property="uPass" destination="XIC-qP-n4u" id="yzR-MA-c24"/>
+                        <segue destination="zZ1-DR-Hh7" kind="presentation" id="rzX-js-DM3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OY7-kl-Rwa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -104,7 +105,7 @@
                         <viewControllerLayoutGuide type="bottom" id="vBS-Vc-5yV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="b4l-dy-HmC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
@@ -123,7 +124,7 @@
                         <viewControllerLayoutGuide type="bottom" id="ZXh-ti-dY7"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="mcn-6I-3de">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xqL-mO-rRa">
@@ -271,7 +272,7 @@
                         <viewControllerLayoutGuide type="bottom" id="YIO-9Z-rQm"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="f6H-bn-dRG">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
