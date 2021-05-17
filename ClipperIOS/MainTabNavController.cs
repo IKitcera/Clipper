@@ -10,19 +10,9 @@ namespace ClipperIOS
     [Register("MainTabNavController")]
     class MainTabNavController : UITabBarController
     {
-        UIViewController mainFlowTab, newPostTab, profileTab;
         public MainTabNavController()
         {
-            mainFlowTab = new UIViewController();
-            mainFlowTab.TabBarItem = new UITabBarItem("Home", new UIImage("Resource/icons/outline_home_black_24pt.imageset/outline_home_black_24pt.2x.png"), 0);
-
-            newPostTab = new UIViewController();
-            newPostTab.TabBarItem = new UITabBarItem("New Post", new UIImage("Resource/icons/outline_add_black_24pt.imageset/outline_add_black_24pt.2x.png"), 1);
-
-            profileTab = new UIViewController();
-            profileTab.TabBarItem = new UITabBarItem("Profile", new UIImage("Resource/icons/outline_person_outline_black_24pt.imageset/outline_person_outline_black_24pt.2x.png"), 2);
-
-            ViewControllers = new UIViewController[] { mainFlowTab, newPostTab, profileTab };
+          
         }
     }
 }
