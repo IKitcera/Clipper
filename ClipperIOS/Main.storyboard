@@ -89,7 +89,7 @@
                         <outlet property="loginBtn" destination="LUl-bB-pEQ" id="Wi6-7n-AuH"/>
                         <outlet property="uEmail" destination="YNW-eJ-De6" id="tim-P0-u7J"/>
                         <outlet property="uPass" destination="XIC-qP-n4u" id="yzR-MA-c24"/>
-                        <segue destination="zZ1-DR-Hh7" kind="presentation" id="rzX-js-DM3"/>
+                        <segue destination="zZ1-DR-Hh7" kind="presentation" identifier="LoginSuccessful" id="rzX-js-DM3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OY7-kl-Rwa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
