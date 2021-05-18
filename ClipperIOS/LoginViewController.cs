@@ -36,9 +36,11 @@ namespace ClipperIOS
                 {
 
                     //NEW CONTROLLER
-                    var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
-                    PresentViewController(nSWindowController, true, null);
-                    RemoveFromParentViewController();
+                  //  var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
+                    PerformSegue("LoginSuccessful",this);
+                  //  PresentViewController(nSWindowController, true, null);
+                    DismissViewController(true, null);
+                   // RemoveFromParentViewController();
                     //check
                   //  StartActivity(typeof(MainActivity));
                    // Finish();
@@ -102,10 +104,10 @@ namespace ClipperIOS
                         settings.DoNotLogOut(true);
                     }
 
-                var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
-                PresentViewController(nSWindowController, true, null);
-                RemoveFromParentViewController();
-
+                //  var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
+                PerformSegue("LoginSuccessful", this);
+                //  PresentViewController(nSWindowController, true, null);
+                DismissViewController(true, null);
                 //    //StartActivity(intent);
 
                 //    StartActivity(typeof(MainActivity));
