@@ -8,7 +8,7 @@ using UIKit;
 namespace ClipperIOS
 {
     [Register("MainTabNavController")]
-    class MainTabNavController : UITabBarController
+    public class MainTabNavController : UITabBarController
     {
         public MainTabNavController()
         {
