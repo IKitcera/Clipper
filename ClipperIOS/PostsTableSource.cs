@@ -43,13 +43,20 @@ namespace ClipperIOS
             var nick = nicks[indexPath.Row];
             var post = posts[indexPath.Row];
 
-          //  List<UIImage> images = new List<UIImage>();
+            List<UIImage> images = new List<UIImage>();
 
             foreach(var img in post.Images)
             {
-              //  images.Add(ImgFromUrl(img));
+                images.Add(ImgFromUrl(img));
             }
-            //cell.avtr = ]
+            //cell.avtr = avtr;
+            //cell.nick = nick;
+            //cell.photos = photos;
+            //cell.txtBelow = txtBelow;
+            //cell.comment = comment;
+            //cell.reactionUp = reactionUp;
+            //cell.reactionDown = reactionDown;
+
             return cell;
             
         }
