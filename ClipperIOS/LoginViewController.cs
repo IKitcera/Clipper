@@ -34,16 +34,8 @@ namespace ClipperIOS
             {
                 if (settings.GetUserID() != "")
                 {
-
-                    //NEW CONTROLLER
-                  //  var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
-                    PerformSegue("LoginSuccessful",this);
-                  //  PresentViewController(nSWindowController, true, null);
-                    DismissViewController(true, null);
-                   // RemoveFromParentViewController();
-                    //check
-                  //  StartActivity(typeof(MainActivity));
-                   // Finish();
+                  PerformSegue("LoginSuccessful", this);
+                    
                 }
             }
             else
@@ -79,7 +71,17 @@ namespace ClipperIOS
         }
 
         #endregion
+        public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+        {
+            base.PrepareForSegue(segue, sender);
 
+            var mainController = segue.DestinationViewController as MainTabNavController;
+
+            if (mainController != null)
+               //This id MainFlowViewController
+                    mainController.Settings = settings;
+
+        }
         #region Methods
         public void LoginClick()
         {
@@ -104,14 +106,8 @@ namespace ClipperIOS
                         settings.DoNotLogOut(true);
                     }
 
-                //  var nSWindowController = Storyboard.InstantiateViewController("MainTabNavController");
                 PerformSegue("LoginSuccessful", this);
-                //  PresentViewController(nSWindowController, true, null);
-                DismissViewController(true, null);
-                //    //StartActivity(intent);
-
-                //    StartActivity(typeof(MainActivity));
-                //    Finish();
+                
             }
                 else
                 {

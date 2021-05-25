@@ -10,6 +10,8 @@ namespace ClipperIOS
     [Register("ProfileViewController")]
     public class ProfileViewController : UIViewController
     {
+        public string userId { get; set; }
+
         public ProfileViewController(IntPtr handle) : base(handle)
         {
 

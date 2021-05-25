@@ -92,6 +92,10 @@
     <Compile Include="MainFlowViewController.designer.cs">
       <DependentUpon>MainFlowViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="PostsViewCell.cs" />
+    <Compile Include="PostsViewCell.designer.cs">
+      <DependentUpon>PostsViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">

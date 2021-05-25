@@ -11,9 +11,15 @@ namespace ClipperIOS
 {
 	partial class MainFlowViewController
 	{
+		[Outlet]
+		UIKit.UITableView table { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (table != null) {
+				table.Dispose ();
+				table = null;
+			}
 		}
 	}
 }

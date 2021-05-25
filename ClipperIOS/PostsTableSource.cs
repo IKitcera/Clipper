@@ -11,7 +11,7 @@ using System.IO;
 
 namespace ClipperIOS
 {
-    [Register("PostsTableController")]
+    [Register("TableSource")]
     public class PostsTableSource : UITableViewSource
     {
         List<PhotoPost> posts;
@@ -37,28 +37,56 @@ namespace ClipperIOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = new UITableViewCell(UITableViewCellStyle.Default, "");
+            var cell = (PostsViewCell)tableView.DequeueReusableCell("cell", indexPath);
+            
+           // if (cell == null)
+               // cell = new PostsViewCell();
 
-            var artr = avtrs[indexPath.Row];
+            UIImage avtr;
+            if (avtrs[indexPath.Row] != "")
+                avtr = ImgFromUrl(avtrs[indexPath.Row]);
+            else
+                avtr = ImgFromUrl("https://cdn1.vectorstock.com/i/thumb-large/72/35/male-avatar-profile-icon-round-man-face-vector-18307235.jpg");
             var nick = nicks[indexPath.Row];
             var post = posts[indexPath.Row];
 
             List<UIImage> images = new List<UIImage>();
 
-            foreach(var img in post.Images)
+            nfloat maxImgHeight = 0;
+            foreach (var img in post.Images)
             {
-                images.Add(ImgFromUrl(img));
-            }
-            //cell.avtr = avtr;
-            //cell.nick = nick;
-            //cell.photos = photos;
-            //cell.txtBelow = txtBelow;
-            //cell.comment = comment;
-            //cell.reactionUp = reactionUp;
-            //cell.reactionDown = reactionDown;
+                // images.Add(ImgFromUrl(img));
+                var image = ImgFromUrl(img);
+                var iv = cell.imageview;
+                iv.Image = image;
+                cell.scroll.AddSubview(iv);
 
-            return cell;
+                if (maxImgHeight < iv.Image.Size.Height)
+                    maxImgHeight = iv.Image.Size.Height;
+            }
+
+            cell.pageControl.Pages = post.Images.Count;
+
+            // cell.scroll.ContentSize = new CoreGraphics.CGSize(cell.scroll.ContentSize.Width, maxImgHeight);
+            cell.scroll.Frame = new CoreGraphics.CGRect(
+                0,0,cell.scroll.Frame.Width, maxImgHeight
+                );
+            cell.scroll.BackgroundColor = UIColor.Brown;
+            cell.avtr.Image = avtr;
+            cell.userName.Text = nick;
+            //cell.SetPhotos(images);
             
+
+            cell.txtBelow.Text = post.TextBelow;
+            cell.comment.Text = post.Comments.Count.ToString();
+
+            var countOfPositiveReactions = post.Reactions.FindAll(x => x == Reaction.Positive).Count;
+            cell.reactionUp.Text = countOfPositiveReactions.ToString();
+            cell.reactionDown.Text = (post.Reactions.Count - countOfPositiveReactions).ToString();
+
+
+            cell.SizeToFit();
+            return cell;
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)

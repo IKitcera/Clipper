@@ -7,34 +7,34 @@ using UIKit;
 
 namespace ClipperIOS
 {
-    class UserSettings
+    public class UserSettings
     {
-        private NSUserDefaults preferences = NSUserDefaults.StandardUserDefaults;
+        private NSUserDefaults preferences = new NSUserDefaults();
 
-        private static string UserId = "UserId";
-        private static string UserLogin = "UserLogin";
-        private static string UserPassword = "UserPassword";
-        private static string StoragePermission = "StoragePermission";
-        private static string CameraPermission = "CameraPermission";
-        private static string StayLogged = "StayLogged";
+        private static string UserId = "userid";
+        private static string UserLogin = "userlogin";
+        private static string UserPassword = "userpassword";
+        private static string StoragePermission = "storagepermission";
+        private static string CameraPermission = "camerapermission";
+        private static string StayLogged = "staylogged";
+     
         public UserSettings()
         {
-            preferences = NSUserDefaults.StandardUserDefaults;
+            //preferences = new NSUserDefaults();
         }
-
         public void saveUserID(string value)
         {
-            preferences.SetString(UserId, value);
+            preferences.SetString(value, UserId);
             preferences.Synchronize();
         }
         public void saveUserLogin(string value)
         {
-            preferences.SetString(UserLogin, value);
+            preferences.SetString(value, UserLogin);
             preferences.Synchronize();
         }
         public void saveUserPassword(string value)
         {
-            preferences.SetString(UserPassword, value);
+            preferences.SetString(value, UserPassword);
             preferences.Synchronize();
         }
         public void saveCameraPermission(bool value)
@@ -54,7 +54,9 @@ namespace ClipperIOS
         }
         public string GetUserID()
         {
-            return preferences.StringForKey(UserId);
+            var id = preferences.StringForKey(UserId);
+            
+            return id;
         }
         public string GetUserLogin()
         {
