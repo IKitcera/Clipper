@@ -13,7 +13,7 @@ namespace ClipperIOS
 {
     [Register("TableSource")]
     public class PostsTableSource : UITableViewSource
-    {
+    { 
         List<PhotoPost> posts;
         List<string> avtrs;
         List<string> nicks;
@@ -38,44 +38,50 @@ namespace ClipperIOS
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = (PostsViewCell)tableView.DequeueReusableCell("cell", indexPath);
-            
-           // if (cell == null)
-               // cell = new PostsViewCell();
 
             UIImage avtr;
             if (avtrs[indexPath.Row] != "")
                 avtr = ImgFromUrl(avtrs[indexPath.Row]);
             else
                 avtr = ImgFromUrl("https://cdn1.vectorstock.com/i/thumb-large/72/35/male-avatar-profile-icon-round-man-face-vector-18307235.jpg");
+
             var nick = nicks[indexPath.Row];
             var post = posts[indexPath.Row];
 
-            List<UIImage> images = new List<UIImage>();
+            
+            if (post.Images.Count == 1)
+                cell.scroll.ScrollEnabled = false;
 
-            nfloat maxImgHeight = 0;
+            cell.scroll.ContentSize = new CoreGraphics.CGSize(cell.scroll.VisibleSize.Width * (nfloat)post.Images.Count, cell.scroll.VisibleSize.Height);
+      
             foreach (var img in post.Images)
-            {
-                // images.Add(ImgFromUrl(img));
+            { 
                 var image = ImgFromUrl(img);
-                var iv = cell.imageview;
-                iv.Image = image;
-                cell.scroll.AddSubview(iv);
 
-                if (maxImgHeight < iv.Image.Size.Height)
-                    maxImgHeight = iv.Image.Size.Height;
+                var i = post.Images.IndexOf(img);
+                var iv = new UIImageView(new CoreGraphics.CGRect(cell.scroll.VisibleSize.Width * (nfloat)i, 0, cell.scroll.VisibleSize.Width, cell.scroll.VisibleSize.Height));
+
+                iv.Image = image;
+                iv.ContentMode = UIViewContentMode.ScaleAspectFit;
+                
+                cell.scroll.AddSubview(iv);
             }
 
             cell.pageControl.Pages = post.Images.Count;
+            cell.scroll.Scrolled += (sender, e) =>
+            {
+                var sc = sender as UIScrollView;
 
-            // cell.scroll.ContentSize = new CoreGraphics.CGSize(cell.scroll.ContentSize.Width, maxImgHeight);
-            cell.scroll.Frame = new CoreGraphics.CGRect(
-                0,0,cell.scroll.Frame.Width, maxImgHeight
-                );
-            cell.scroll.BackgroundColor = UIColor.Brown;
+                var offset = sc.ContentOffset.X;
+
+                cell.pageControl.CurrentPage = cell.pageControl.Pages - ((int)Math.Round(sc.ContentSize.Width / (offset + sc.VisibleSize.Width)));
+            };
+
             cell.avtr.Image = avtr;
+            cell.avtr.Layer.CornerRadius = cell.avtr.Frame.Size.Height / 2;
+            cell.avtr.ClipsToBounds = true;
+
             cell.userName.Text = nick;
-            //cell.SetPhotos(images);
-            
 
             cell.txtBelow.Text = post.TextBelow;
             cell.comment.Text = post.Comments.Count.ToString();
@@ -83,7 +89,6 @@ namespace ClipperIOS
             var countOfPositiveReactions = post.Reactions.FindAll(x => x == Reaction.Positive).Count;
             cell.reactionUp.Text = countOfPositiveReactions.ToString();
             cell.reactionDown.Text = (post.Reactions.Count - countOfPositiveReactions).ToString();
-
 
             cell.SizeToFit();
             return cell;
@@ -93,11 +98,15 @@ namespace ClipperIOS
         {
             return posts.Count;
         }
+
         static UIImage ImgFromUrl(string uri)
         {
             using (var url = new NSUrl(uri))
             using (var data = NSData.FromUrl(url))
                 return UIImage.LoadFromData(data); 
         }
+        static
+       
     }
+
 }

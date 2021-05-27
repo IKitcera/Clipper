@@ -96,6 +96,17 @@
     <Compile Include="PostsViewCell.designer.cs">
       <DependentUpon>PostsViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewPostViewController.designer.cs">
+      <DependentUpon>NewPostViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PhotoShortCut.cs" />
+    <Compile Include="PhotoShortCut.designer.cs">
+      <DependentUpon>PhotoShortCut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditingPostViewController.cs" />
+    <Compile Include="EditingPostViewController.designer.cs">
+      <DependentUpon>EditingPostViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">

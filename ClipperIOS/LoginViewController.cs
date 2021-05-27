@@ -1,5 +1,4 @@
-﻿
-using Foundation;
+﻿using Foundation;
 using System;
 using System.Drawing;
 using UIKit;
@@ -26,27 +25,14 @@ namespace ClipperIOS
         #region View lifecycle
         public override void ViewDidLoad()
         {
-            loginViewModel = new LoginViewModel();
-            settings = new UserSettings();
-            loginBtn.TouchUpInside += (sender, e) => LoginClick();
-            
-            if (settings.GetDoNotLogOut())
-            {
-                if (settings.GetUserID() != "")
-                {
-                  PerformSegue("LoginSuccessful", this);
-                    
-                }
-            }
-            else
-            {
-                uEmail.Text = settings.GetUserLogin();
-                uPass.Text = settings.GetUserPassword();
-            }
-            errorLabel.Hidden = true;
             base.ViewDidLoad();
 
+            loginViewModel = new LoginViewModel();
+            settings = new UserSettings();
 
+            loginBtn.TouchUpInside += (sender, e) => LoginClick();
+
+            errorLabel.Hidden = true;
             // Perform any additional setup after loading the view, typically from a nib.
         }
 
@@ -58,6 +44,20 @@ namespace ClipperIOS
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
+
+            if (settings.GetDoNotLogOut())
+            {
+                if (settings.GetUserID() != "" || settings.GetUserID() != null)
+                {
+                    PerformSegue("LoginSuccessful", this);
+                }
+                else
+                {
+                    uEmail.Text = settings.GetUserLogin();
+                    uPass.Text = settings.GetUserPassword();
+                }
+            }
+            preloader.Hidden = true;
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -78,7 +78,6 @@ namespace ClipperIOS
             var mainController = segue.DestinationViewController as MainTabNavController;
 
             if (mainController != null)
-               //This id MainFlowViewController
                     mainController.Settings = settings;
 
         }
@@ -91,31 +90,24 @@ namespace ClipperIOS
             var userId = loginViewModel.TryLogin();
             if (userId != "")
             {
-                //    //Intent intent = new Intent(this, typeof(MainActivity));
-                //    //Bundle bundle = new Bundle();
-                //    //intent.PutExtra("userId", userId);
-
                 var cb = doNotLogout;
 
                 settings.saveUserLogin(loginViewModel.Email);
-                    settings.saveUserPassword(loginViewModel.Password);
-                    settings.saveUserID(userId);
+                settings.saveUserPassword(loginViewModel.Password);
+                settings.saveUserID(userId);
 
-                    if (cb.On)
-                    {
-                        settings.DoNotLogOut(true);
-                    }
+                if (cb.On)
+                   settings.DoNotLogOut(true);
 
                 PerformSegue("LoginSuccessful", this);
-                
             }
-                else
-                {
+            else
+            {
                     errorLabel.Text = loginViewModel.Message;
                     errorLabel.Hidden = false;
                    
-                }
             }
-            #endregion
         }
+        #endregion
+    }
 }

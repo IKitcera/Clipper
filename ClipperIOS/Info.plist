@@ -55,5 +55,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>You will be able to pick photos from gallery to your new post</string>
 </dict>
 </plist>

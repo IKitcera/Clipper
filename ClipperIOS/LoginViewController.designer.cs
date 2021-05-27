@@ -22,6 +22,9 @@ namespace ClipperIOS
 		UIKit.UIButton loginBtn { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView preloader { get; set; }
+
+		[Outlet]
 		UIKit.UITextField uEmail { get; set; }
 
 		[Outlet]
@@ -29,6 +32,26 @@ namespace ClipperIOS
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (preloader != null) {
+				preloader.Dispose ();
+				preloader = null;
+			}
+
+			if (doNotLogout != null) {
+				doNotLogout.Dispose ();
+				doNotLogout = null;
+			}
+
+			if (errorLabel != null) {
+				errorLabel.Dispose ();
+				errorLabel = null;
+			}
+
+			if (loginBtn != null) {
+				loginBtn.Dispose ();
+				loginBtn = null;
+			}
+
 			if (uEmail != null) {
 				uEmail.Dispose ();
 				uEmail = null;
@@ -37,21 +60,6 @@ namespace ClipperIOS
 			if (uPass != null) {
 				uPass.Dispose ();
 				uPass = null;
-			}
-
-			if (doNotLogout != null) {
-				doNotLogout.Dispose ();
-				doNotLogout = null;
-			}
-
-			if (loginBtn != null) {
-				loginBtn.Dispose ();
-				loginBtn = null;
-			}
-
-			if (errorLabel != null) {
-				errorLabel.Dispose ();
-				errorLabel = null;
 			}
 		}
 	}
