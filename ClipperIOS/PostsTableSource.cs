@@ -41,9 +41,9 @@ namespace ClipperIOS
 
             UIImage avtr;
             if (avtrs[indexPath.Row] != "")
-                avtr = ImgFromUrl(avtrs[indexPath.Row]);
+                avtr = ImageProcessing.ImgFromUrl(avtrs[indexPath.Row]);
             else
-                avtr = ImgFromUrl("https://cdn1.vectorstock.com/i/thumb-large/72/35/male-avatar-profile-icon-round-man-face-vector-18307235.jpg");
+                avtr = ImageProcessing.ImgFromUrl("https://cdn1.vectorstock.com/i/thumb-large/72/35/male-avatar-profile-icon-round-man-face-vector-18307235.jpg");
 
             var nick = nicks[indexPath.Row];
             var post = posts[indexPath.Row];
@@ -56,7 +56,7 @@ namespace ClipperIOS
       
             foreach (var img in post.Images)
             { 
-                var image = ImgFromUrl(img);
+                var image = ImageProcessing.ImgFromUrl(img);
 
                 var i = post.Images.IndexOf(img);
                 var iv = new UIImageView(new CoreGraphics.CGRect(cell.scroll.VisibleSize.Width * (nfloat)i, 0, cell.scroll.VisibleSize.Width, cell.scroll.VisibleSize.Height));
@@ -99,13 +99,6 @@ namespace ClipperIOS
             return posts.Count;
         }
 
-        static UIImage ImgFromUrl(string uri)
-        {
-            using (var url = new NSUrl(uri))
-            using (var data = NSData.FromUrl(url))
-                return UIImage.LoadFromData(data); 
-        }
-        static
        
     }
 

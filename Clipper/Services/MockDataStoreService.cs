@@ -71,7 +71,7 @@ namespace Clipper.Services
                           new PhotoPost {  Id = Guid.NewGuid().ToString(),
                               UserId ="1111",
                              Images = new List<string>()
-                            { "http://c.files.bbci.co.uk/C870/production/_112921315_gettyimages-876284806.jpg"     },
+                            { "https://static-cse.canva.com/blob/140259/ComposeStunningImages7.jpg"     },
                             TextBelow = "photo..6",
                             Comments = new List<Comment>()   {new Comment{Id = Guid.NewGuid().ToString(), Text = "well", UserID = users[2].Id }   },
                              CreatingTime = DateTime.Now,

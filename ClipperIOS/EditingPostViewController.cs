@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Clipper.ViewModels;
 using CoreGraphics;
 using Foundation;
@@ -13,36 +15,20 @@ namespace ClipperIOS
 	{
         private AddViewModel addViewModel;
 
+        public string userId { get; set; }
+
 		public List<UIImage> images;
         public List<string> uris;
 
 		public EditingPostViewController (IntPtr handle) : base (handle)
 		{
+
 		}
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-
-
-            foreach (var uri in uris)
-            {
-                var imgView = new UIImageView(
-                    new CGRect(scroll.VisibleSize.Width * uris.IndexOf(uri), 0,
-                        scroll.VisibleSize.Width, scroll.VisibleSize.Height)
-                    );
-                imgView.ContentMode = UIViewContentMode.ScaleAspectFit;
-                imgView.Image = new UIImage(uri);
-                scroll.AddSubview(imgView);
-            }
-            scroll.ContentSize = new CoreGraphics.CGSize(
-                scroll.VisibleSize.Width * images.Count,
-                scroll.VisibleSize.Height);
-
-            pageCntrl.Pages = images.Count;
-
-
-            /*
+      
             foreach (var img in images)
             {
                 var imgView = new UIImageView(
@@ -58,7 +44,7 @@ namespace ClipperIOS
                 scroll.VisibleSize.Height);
 
             pageCntrl.Pages = images.Count;
-            */
+            
             scroll.Scrolled += (s, e) =>
             {
                 var sc = s as UIScrollView;
@@ -72,30 +58,49 @@ namespace ClipperIOS
                 DismissViewController(false, null);
             };
 
-            postBtn.TouchUpInside += (sender, e) =>
+            postBtn.TouchUpInside += (sender, e) => Post();
+        }
+
+
+        private void Post()
+        {
+            addViewModel = new AddViewModel();
+
+            addViewModel.Title = txtBelow.Text;
+
+            uris = new List<string>();
+            foreach (var i in images)
             {
-                addViewModel = new AddViewModel();
+                uris.Add(ImageProcessing.SaveImg(i).ToString());
+            }
+            addViewModel.Photos = uris;
 
-                addViewModel.Title = txtBelow.Text;
-         
-                UIImage.SaveStatus status = (im, er) =>
-                {
-                    Console.WriteLine(im);
-                    Console.WriteLine(er);
-                };
+            var successfully = addViewModel.AddNewPost(userId);
 
-                foreach(var img in images)
-                {
-                    string filepath = (NSString)img.ValueForKey((NSString)"filename");
-                    var image = new UIImage(filepath);
-                    if(img == image)
-                        Console.WriteLine("1");
-                    else
-                        Console.WriteLine("2");
-                }
-                
-                
-            };
+            UIAlertController alert = new UIAlertController();
+
+            if (successfully)
+                alert.Message = "You have made a new post successfully !";
+            else
+                alert.Message = "An error was occured";
+
+
+            var root = ((MainTabNavController)PresentingViewController);
+            var currentVC = root.SelectedViewController as NewPostViewController;
+
+            DismissViewController(true, () =>
+            {
+                root.SelectedViewController = root.ViewControllers
+                    .Where(vc => vc.GetType() == new ProfileViewController(IntPtr.Zero).GetType()).FirstOrDefault();
+                (root.SelectedViewController as ProfileViewController).UpdateTableSource();
+                currentVC.Init();
+
+            });
+        
+            
+
+           // currentVC.DismissViewController(false,null); 
+           
         }
     }
 }

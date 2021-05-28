@@ -17,16 +17,18 @@ namespace ClipperIOS
 
         private bool selectOne = true;
 
-        public string userId { get; set; }
+        private string userId;
 
 
         public NewPostViewController(IntPtr handle) : base(handle)
         { 
-
+            
         }
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            userId = ((MainTabNavController)ParentViewController).Settings.GetUserID();
 
             if (!((MainTabNavController)ParentViewController).Settings.GetStoragePermission())
             {
@@ -46,7 +48,6 @@ namespace ClipperIOS
             else
             {
                 Init();
-                
             }
         }
 
@@ -61,13 +62,12 @@ namespace ClipperIOS
                 if(editController != null)
                 {
                     editController.images = selectedImgs;
-                    editController.uris = selectedUrl;
-                    
+                    editController.userId = userId;
                 }
             }
         }
 
-        private void Init()
+        public void Init()
         {
             var options = new PHFetchOptions();
             options.SortDescriptors = new NSSortDescriptor[]{
@@ -81,6 +81,8 @@ namespace ClipperIOS
 
             selectManyBtn.TouchUpInside += (sender, e) =>
             {
+                ((CollectionViewSource)libraryPhotos.DataSource).UncheckAll();
+
                 if (selectOne)
                 {
                     selectOne = false;
@@ -94,7 +96,6 @@ namespace ClipperIOS
                     selectedImgs = new List<UIImage>();
                     selectedUrl = new List<string>();
 
-                    ((CollectionViewSource)libraryPhotos.DataSource).UncheckAll();
 
                     takePictureBtn.Hidden = false;
                     doneManyBtn.Hidden = true;
@@ -104,7 +105,8 @@ namespace ClipperIOS
             doneManyBtn.TouchUpInside += (sender, e) => PerformSegue("PostEditing", this);
         }
 
-        public void PreparePost(UIImage image, UIButton checkBtn, string path)
+
+        public void PreparePost(UIImage image, UIButton checkBtn)
         {
             if (selectOne)
             {
@@ -115,7 +117,6 @@ namespace ClipperIOS
                 }
 
                 selectedImgs.Add(image);
-                selectedUrl.Add(path);
 
                 PerformSegue("PostEditing", this);
             }
@@ -124,14 +125,12 @@ namespace ClipperIOS
                 if (!selectedImgs.Contains(image))
                 {
                     selectedImgs.Add(image);
-                    selectedUrl.Add(path);
 
                     checkBtn.Hidden = false;
                 }
                 else
                 {
                     selectedImgs.Remove(image);
-                    selectedUrl.Remove(path);
 
                     checkBtn.Hidden = true;
                 }
@@ -160,7 +159,7 @@ namespace ClipperIOS
             images = new List<UIImage>();
 
             foreach (var img in photos)
-                images.Add(ImgFromUrl(img));
+                images.Add(ImageProcessing.ImgFromUrl(img));
         }
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
@@ -171,7 +170,7 @@ namespace ClipperIOS
 
             imageMngr.RequestImageForAsset(
                 (PHAsset)result[(int)indexPath.Row],
-                new CoreGraphics.CGSize(200, 200),
+                new CoreGraphics.CGSize(2000, 2000),
                 PHImageContentMode.AspectFit,
                 new PHImageRequestOptions(),
                 (img, info) =>
@@ -181,9 +180,10 @@ namespace ClipperIOS
                     inf = info;
                 });
 
-            string path = (NSString)((PHAsset)result[(int)indexPath.Row]).ValueForKey((NSString)"filename");
+            string fname = (NSString)((PHAsset)result[(int)indexPath.Row]).ValueForKey((NSString)"filename");
+            string encodedImg = ImageProcessing.EncodeImg(cell.img.Image);
 
-            cell.imgBtn.TouchUpInside += (sender, e) => postViewController.PreparePost(cell.img.Image, cell.check, path);
+            cell.imgBtn.TouchUpInside += (sender, e) => postViewController.PreparePost(cell.img.Image, cell.check);
 
             cells.Add(cell);
 
@@ -194,21 +194,6 @@ namespace ClipperIOS
         {
             return result.Count;
         }
-
-        static UIImage ImgFromUrl(string uri)
-        {
-            using (var url = new NSUrl(uri))
-            using (var data = NSData.FromUrl(url))
-                return UIImage.LoadFromData(data);
-        }
-
-        static string ImgToUrl(UIImage image)
-        {
-            var data = image.AsPNG();
-            return data.GetBase64EncodedString(new NSDataBase64EncodingOptions());
-
-        }
-
         public void UncheckAll()
         {
             cells.FindAll(x => x.check.Hidden == false).ForEach((cell) => cell.check.Hidden = true);

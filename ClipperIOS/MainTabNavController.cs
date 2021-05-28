@@ -23,7 +23,19 @@ namespace ClipperIOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+        }
+        public override void ViewWillAppear(bool animated)
+        {
 
+            base.ViewWillAppear(animated);
+        }
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+        }
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
         }
     }
 }

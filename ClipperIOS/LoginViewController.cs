@@ -82,7 +82,7 @@ namespace ClipperIOS
 
         }
         #region Methods
-        public void LoginClick()
+        private void LoginClick()
         {
             loginViewModel.Email = uEmail.Text;
             loginViewModel.Password =uPass.Text;
