@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using UIKit;
 using Clipper.ViewModels;
+using System.Threading.Tasks;
 
 namespace ClipperIOS
 {
@@ -44,20 +45,23 @@ namespace ClipperIOS
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-
-            if (settings.GetDoNotLogOut())
-            {
-                if (settings.GetUserID() != "" || settings.GetUserID() != null)
+            /*
+           
+                if (settings.GetDoNotLogOut())
                 {
-                    PerformSegue("LoginSuccessful", this);
-                }
-                else
-                {
-                    uEmail.Text = settings.GetUserLogin();
-                    uPass.Text = settings.GetUserPassword();
-                }
-            }
+                    if (settings.GetUserID() != "" || settings.GetUserID() != null)
+                    {
+                         PerformSegue("LoginSuccessful", this);
+                    }
+                    else
+                    {
+            */
+                        uEmail.Text = settings.GetUserLogin();
+                        uPass.Text = settings.GetUserPassword();
+                 //   }
+            //    }
             preloader.Hidden = true;
+            
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -105,9 +109,10 @@ namespace ClipperIOS
             {
                     errorLabel.Text = loginViewModel.Message;
                     errorLabel.Hidden = false;
-                   
             }
         }
+
+       
         #endregion
     }
 }

@@ -75,11 +75,7 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="MainFlowViewController.cs" />
     <Compile Include="MainTabNavController.cs" />
-    <Compile Include="NewPostViewController.cs" />
-    <Compile Include="PostsTableSource.cs" />
-    <Compile Include="ProfileViewController.cs" />
     <Compile Include="SceneDelegate.cs" />
     <Compile Include="UserSettings.cs" />
     <None Include="Info.plist" />
@@ -89,33 +85,37 @@
     <BundleResource Include="Resources\icons\outline_home_black_24pt.imageset\Contents.json" />
     <BundleResource Include="Resources\icons\outline_add_black_24pt.imageset\Contents.json" />
     <BundleResource Include="Resources\icons\outline_person_outline_black_24pt.imageset\Contents.json" />
-    <Compile Include="MainFlowViewController.designer.cs">
-      <DependentUpon>MainFlowViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PostsViewCell.cs" />
-    <Compile Include="PostsViewCell.designer.cs">
-      <DependentUpon>PostsViewCell.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NewPostViewController.designer.cs">
-      <DependentUpon>NewPostViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PhotoShortCut.cs" />
-    <Compile Include="PhotoShortCut.designer.cs">
-      <DependentUpon>PhotoShortCut.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EditingPostViewController.cs" />
-    <Compile Include="EditingPostViewController.designer.cs">
-      <DependentUpon>EditingPostViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="ImageProcessing.cs" />
-    <Compile Include="ProfileViewController.designer.cs">
-      <DependentUpon>ProfileViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProfileImgShortCell.cs" />
-    <Compile Include="ProfileImgShortCell.designer.cs">
+    <Compile Include="Profile\ProfileImgShortCell.cs" />
+    <Compile Include="Profile\ProfileImgShortCell.designer.cs">
       <DependentUpon>ProfileImgShortCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProfilePostsCollectionSource.cs" />
+    <Compile Include="Profile\ProfilePostsCollectionSource.cs" />
+    <Compile Include="Profile\ProfileViewController.cs" />
+    <Compile Include="Profile\ProfileViewController.designer.cs">
+      <DependentUpon>ProfileViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainFlow\MainFlowViewController.cs" />
+    <Compile Include="MainFlow\MainFlowViewController.designer.cs">
+      <DependentUpon>MainFlowViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainFlow\PostsTableSource.cs" />
+    <Compile Include="NewPost\NewPostViewController.cs" />
+    <Compile Include="NewPost\NewPostViewController.designer.cs">
+      <DependentUpon>NewPostViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewPost\PhotoShortCut.cs" />
+    <Compile Include="NewPost\PhotoShortCut.designer.cs">
+      <DependentUpon>PhotoShortCut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewPost\EditingPostViewController.cs" />
+    <Compile Include="NewPost\EditingPostViewController.designer.cs">
+      <DependentUpon>EditingPostViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainFlow\PostItemCell.cs" />
+    <Compile Include="MainFlow\PostItemCell.designer.cs">
+      <DependentUpon>PostItemCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -206,5 +206,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Profile\" />
+    <Folder Include="MainFlow\" />
+    <Folder Include="NewPost\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

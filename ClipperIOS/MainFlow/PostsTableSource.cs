@@ -17,28 +17,23 @@ namespace ClipperIOS
         List<PhotoPost> posts;
         List<string> avtrs;
         List<string> nicks;
-       
-        public event Action<string> ItemClick;
-        Action<string> listener;
-      
-        public PostsTableSource(HomeViewModel home)
+        MainFlowViewController owner;
+
+        public PostsTableSource(HomeViewModel home, MainFlowViewController mainFlowViewController)
         {
             posts = home.Flow;
             avtrs = home.UsersAvatars;
             nicks = home.UsersNames;
 
-            listener = OnClick;
-        }
-
-        private void OnClick(string obj)
-        {
-            throw new NotImplementedException();
+            owner = mainFlowViewController;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = (PostsViewCell)tableView.DequeueReusableCell("cell", indexPath);
-
+            //tableView.RegisterClassForCellReuse(typeof(PostItemCell), "postItem");
+            var c = tableView.DequeueReusableCell("postItem", indexPath);
+            PostItemCell cell = (PostItemCell)c;
+          
             UIImage avtr;
             if (avtrs[indexPath.Row] != "")
                 avtr = ImageProcessing.ImgFromUrl(avtrs[indexPath.Row]);
@@ -63,7 +58,7 @@ namespace ClipperIOS
 
                 iv.Image = image;
                 iv.ContentMode = UIViewContentMode.ScaleAspectFit;
-                
+                iv.BackgroundColor = UIColor.White;
                 cell.scroll.AddSubview(iv);
             }
 
@@ -80,6 +75,8 @@ namespace ClipperIOS
             cell.avtr.Image = avtr;
             cell.avtr.Layer.CornerRadius = cell.avtr.Frame.Size.Height / 2;
             cell.avtr.ClipsToBounds = true;
+
+            cell.aBtn.TouchUpInside += (sender, e) => owner.ShowUsersProfile(posts[indexPath.Row].UserId);
 
             cell.userName.Text = nick;
 
@@ -98,8 +95,5 @@ namespace ClipperIOS
         {
             return posts.Count;
         }
-
-       
     }
-
 }

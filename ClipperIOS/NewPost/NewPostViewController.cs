@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UIKit;
 
 namespace ClipperIOS
@@ -36,7 +37,8 @@ namespace ClipperIOS
                 {
                     if(perm == Photos.PHAuthorizationStatus.Authorized)
                     {
-                        ((MainTabNavController)ParentViewController).Settings.saveStoragePermission(true);
+                        BeginInvokeOnMainThread(() =>
+                            ((MainTabNavController)ParentViewController).Settings.saveStoragePermission(true));
                         Init();
                     }
                     else
@@ -103,8 +105,22 @@ namespace ClipperIOS
             };
 
             doneManyBtn.TouchUpInside += (sender, e) => PerformSegue("PostEditing", this);
+
+
         }
 
+        public void Reset()
+        {
+
+            selectedImgs = new List<UIImage>();
+            selectedUrl = new List<string>();
+
+            selectOne = true;
+            takePictureBtn.Hidden = false;
+            doneManyBtn.Hidden = false;
+
+            ((CollectionViewSource)libraryPhotos.DataSource).UncheckAll();
+        }
 
         public void PreparePost(UIImage image, UIButton checkBtn)
         {

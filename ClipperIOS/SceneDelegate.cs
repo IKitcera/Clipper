@@ -1,4 +1,5 @@
 ﻿using System;
+using ClipperIOS;
 using Foundation;
 using UIKit;
 
@@ -9,13 +10,29 @@ namespace NewSingleViewTemplate {
 		[Export ("window")]
 		public UIWindow Window { get; set; }
 
+		public UserSettings Settings;
+
 		[Export ("scene:willConnectToSession:options:")]
 		public void WillConnect (UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
 		{
 			// Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
 			// If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
 			// This delegate does not imply the connecting scene or session are new (see UIApplicationDelegate `GetConfiguration` instead).
-		//	Window.AddSubview(scene.)
+			//	Window.AddSubview(scene.)
+
+			if(Settings == null)
+				Settings = new UserSettings();
+
+			if (Settings.GetDoNotLogOut() &&
+				(Settings.GetUserID() != null || Settings.GetUserID() != ""))
+			{
+				var stroyboard = UIStoryboard.FromName("Main", null);
+
+				var mainNavController = stroyboard.InstantiateViewController("MainNav") as MainTabNavController;
+				mainNavController.Settings = Settings;
+
+				Window.RootViewController = mainNavController;
+			}
 		}
 
 		[Export ("sceneDidDisconnect:")]
@@ -32,6 +49,8 @@ namespace NewSingleViewTemplate {
 		{
 			// Called when the scene has moved from an inactive state to an active state.
 			// Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+
+			
 		}
 
 		[Export ("sceneWillResignActive:")]

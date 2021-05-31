@@ -54,7 +54,7 @@ namespace ClipperIOS
         }
         public string GetUserID()
         {
-            return preferences.StringForKey(UserId);
+           return preferences.StringForKey(UserId);
         }
         public string GetUserLogin()
         {

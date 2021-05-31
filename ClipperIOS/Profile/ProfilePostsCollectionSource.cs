@@ -8,8 +8,8 @@ namespace ClipperIOS
     public class ProfilePostsCollectionSource : UICollectionViewSource
     {
         List<UIImage> images;
-
-        public ProfilePostsCollectionSource(List<string> imgs)
+        ProfileViewController owner;
+        public ProfilePostsCollectionSource(List<string> imgs, ProfileViewController profileController)
         {
             images = new List<UIImage>();
 
@@ -22,6 +22,8 @@ namespace ClipperIOS
 
                 images.Add(uiimage);
             }
+
+            owner = profileController;
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -34,10 +36,11 @@ namespace ClipperIOS
         {
             var cell = (ProfileImgShortCell)collectionView.DequeueReusableCell("profilePostsViewCell", indexPath);
 
-
             cell.img.ContentMode = UIViewContentMode.ScaleAspectFill;
             cell.img.Image = images[indexPath.Row];
 
+            cell.clickBtn.TouchUpInside += (sender, e) => owner.ShowPostsFlow(indexPath);
+            
             cell.SizeToFit();
 
             return cell;

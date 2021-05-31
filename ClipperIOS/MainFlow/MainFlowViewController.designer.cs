@@ -9,17 +9,24 @@ using System.CodeDom.Compiler;
 
 namespace ClipperIOS
 {
-	[Register ("ProfileImgShortCell")]
-	partial class ProfileImgShortCell
+	partial class MainFlowViewController
 	{
 		[Outlet]
-		public UIKit.UIImageView img { get; set; }
+		UIKit.UIButton backBtn { get; set; }
+
+		[Outlet]
+		UIKit.UITableView table { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (img != null) {
-				img.Dispose ();
-				img = null;
+			if (table != null) {
+				table.Dispose ();
+				table = null;
+			}
+
+			if (backBtn != null) {
+				backBtn.Dispose ();
+				backBtn = null;
 			}
 		}
 	}

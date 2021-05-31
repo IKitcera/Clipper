@@ -16,9 +16,9 @@ namespace ClipperIOS
         {
 
         }
-        public MainTabNavController(IntPtr handle):base(handle)
+        public MainTabNavController(IntPtr handle) : base(handle)
         {
-          
+
         }
         public override void ViewDidLoad()
         {
@@ -29,13 +29,32 @@ namespace ClipperIOS
 
             base.ViewWillAppear(animated);
         }
-        public override void ViewDidAppear(bool animated)
+        public override void ItemSelected(UITabBar tabbar, UITabBarItem item)
         {
-            base.ViewDidAppear(animated);
+            ResetAll();
         }
-        public override void ViewWillDisappear(bool animated)
+        private void ResetAll()
         {
-            base.ViewWillDisappear(animated);
+            for (int i = 0; i < ViewControllers.Count(); i++)
+            {
+                if (ViewControllers[i] is MainFlowViewController)
+                {
+                    var mfVC = Storyboard.InstantiateViewController("MainFlowController");
+                    ViewControllers[i] = mfVC;
+                }
+                else if (ViewControllers[i] is NewPostViewController)
+                {
+                    var npVC = Storyboard.InstantiateViewController("NewPostController");
+                    ViewControllers[i] = npVC;
+
+                }
+                else if (ViewControllers[i] is ProfileViewController)
+                {
+                    var pVC = Storyboard.InstantiateViewController("ProfileController");
+                    ViewControllers[i] = pVC;
+
+                }
+            }
         }
     }
 }

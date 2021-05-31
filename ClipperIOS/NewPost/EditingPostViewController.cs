@@ -86,20 +86,12 @@ namespace ClipperIOS
 
 
             var root = ((MainTabNavController)PresentingViewController);
-            var currentVC = root.SelectedViewController as NewPostViewController;
+            var newPostViewController = root.SelectedViewController as NewPostViewController;
+            newPostViewController.Reset();
+            root.SelectedViewController = root.ViewControllers.Where(vc => vc is MainFlowViewController).FirstOrDefault();
 
-            DismissViewController(true, () =>
-            {
-                root.SelectedViewController = root.ViewControllers
-                    .Where(vc => vc.GetType() == new ProfileViewController(IntPtr.Zero).GetType()).FirstOrDefault();
-                (root.SelectedViewController as ProfileViewController).UpdateTableSource();
-                currentVC.Init();
-
-            });
-        
-            
-
-           // currentVC.DismissViewController(false,null); 
+            DismissViewController(false, () => newPostViewController.DismissViewController(false, null));
+            // = root.ViewControllers.Where(vc => vc as MainFlowViewController != null).FirstOrDefault();
            
         }
     }

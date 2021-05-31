@@ -18,7 +18,10 @@ namespace ClipperIOS
 		UIKit.UIImageView avtrImageView { get; set; }
 
 		[Outlet]
-		public UIKit.UICollectionView postsCollectionView { get; set; }
+		UIKit.UIButton backBtn { get; set; }
+
+		[Outlet]
+		public UIKit.UICollectionView postsCollectionView { get; private set; }
 
 		[Outlet]
 		UIKit.UILabel postsCount { get; set; }
@@ -34,9 +37,14 @@ namespace ClipperIOS
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (postsCollectionView != null) {
-				postsCollectionView.Dispose ();
-				postsCollectionView = null;
+			if (backBtn != null) {
+				backBtn.Dispose ();
+				backBtn = null;
+			}
+
+			if (aboutMyselfLabel != null) {
+				aboutMyselfLabel.Dispose ();
+				aboutMyselfLabel = null;
 			}
 
 			if (avtrImageView != null) {
@@ -44,14 +52,9 @@ namespace ClipperIOS
 				avtrImageView = null;
 			}
 
-			if (userNameLabel != null) {
-				userNameLabel.Dispose ();
-				userNameLabel = null;
-			}
-
-			if (aboutMyselfLabel != null) {
-				aboutMyselfLabel.Dispose ();
-				aboutMyselfLabel = null;
+			if (postsCollectionView != null) {
+				postsCollectionView.Dispose ();
+				postsCollectionView = null;
 			}
 
 			if (postsCount != null) {
@@ -67,6 +70,11 @@ namespace ClipperIOS
 			if (subscribingsCount != null) {
 				subscribingsCount.Dispose ();
 				subscribingsCount = null;
+			}
+
+			if (userNameLabel != null) {
+				userNameLabel.Dispose ();
+				userNameLabel = null;
 			}
 		}
 	}

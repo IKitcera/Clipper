@@ -13,8 +13,9 @@ namespace ClipperIOS
     {
         private ProfileViewModel profileViewModel;
 
+        public UserSettings Settings { get; set; }
         public string userId { get; set; }
-
+        public bool isOwn = true;
 
         public ProfileViewController(IntPtr handle) : base(handle)
         {
@@ -24,13 +25,21 @@ namespace ClipperIOS
         {
             base.ViewDidLoad();
 
-            userId = ((MainTabNavController)ParentViewController).Settings.GetUserID();
-
+            if (isOwn)
+            {
+                Settings = ((MainTabNavController)ParentViewController).Settings;
+                userId = Settings.GetUserID();
+            }
+            else
+            {
+                backBtn.Hidden = false;
+                backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
+            }
             profileViewModel = new ProfileViewModel(userId);
 
             postsCollectionView.ContentMode = UIViewContentMode.Center;
 
-            postsCollectionView.DataSource = new ProfilePostsCollectionSource(profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList());
+            postsCollectionView.DataSource = new ProfilePostsCollectionSource(profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList(), this);
 
             userNameLabel.Text = profileViewModel.Name;
             aboutMyselfLabel.Text = profileViewModel.TextAbout;
@@ -48,12 +57,29 @@ namespace ClipperIOS
             subscribersCount.Text = profileViewModel.Subscribers.ToString();
             subscribingsCount.Text = profileViewModel.Subscribings.ToString();
         }
-      
-        public void UpdateTableSource()
+
+        public override void ViewWillAppear(bool animated)
         {
-            profileViewModel = new ProfileViewModel(userId);
-            postsCollectionView.DataSource = new ProfilePostsCollectionSource(profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList());
-       
+            base.ViewWillAppear(animated);
+
+            postsCount.Text = profileViewModel.PhotoPosts.Count.ToString();
+            postsCollectionView.DataSource = new ProfilePostsCollectionSource(profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList(), this);
+    
+        }
+        public void ShowPostsFlow(NSIndexPath nspath)
+        {
+            var mainFlowController = Storyboard.InstantiateViewController("MainFlowController") as MainFlowViewController;
+            if(Settings == null)
+                Settings = ((MainTabNavController)ParentViewController).Settings;
+
+            if(isOwn)
+                mainFlowController.isOwn = true;
+           
+            mainFlowController.indexPath = nspath;
+            mainFlowController.Settings = Settings;
+            //PresentViewController(mainFlowController,false, null);
+            ShowViewController(mainFlowController, this);
+            
         }
     }
 }

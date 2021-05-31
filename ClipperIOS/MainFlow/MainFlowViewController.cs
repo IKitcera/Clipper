@@ -9,28 +9,38 @@ using UIKit;
 namespace ClipperIOS
 {
     [Register("MainFlowViewController")]
-    public partial class MainFlowViewController :  UIViewController
+    public partial class MainFlowViewController : UIViewController
     {
         HomeViewModel homeViewModel;
-        public string userId;
-        public UserSettings Settings;
+        public string userId { get; set; }
+        public UserSettings Settings { get; set; }
         public bool isOwn { get; set; } = false;
+        public NSIndexPath indexPath {get; set;}
 
         public MainFlowViewController(IntPtr handle):base(handle)
         {
-           
+          
         }
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-            Settings = ((MainTabNavController)ParentViewController).Settings;
+            if (!isOwn) 
+                Settings = ((MainTabNavController)ParentViewController).Settings;
             userId = Settings.GetUserID();
 
             homeViewModel = new HomeViewModel(userId, isOwn);
 
-            table.Source = new PostsTableSource(homeViewModel);
+            table.Source = new PostsTableSource(homeViewModel, this);
 
+            if (isOwn)
+            {
+                backBtn.Hidden = false;
+                table.Frame = new CoreGraphics.CGRect(0, 70, 414, 860);
+
+                backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
+            }
+               
             var permissions = Photos.PHPhotoLibrary.AuthorizationStatus;
             if (Settings.GetStoragePermission() == false)
             {
@@ -52,6 +62,24 @@ namespace ClipperIOS
                         break;
                 }
             }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if(isOwn)
+                table.ScrollToRow(indexPath, UITableViewScrollPosition.Top, false);
+        }
+
+        public void ShowUsersProfile(string userId)
+        {
+            var profileControler = Storyboard.InstantiateViewController("ProfileController") as ProfileViewController;
+            profileControler.userId = userId;
+            profileControler.isOwn = false;
+            profileControler.Settings = Settings;
+            ShowViewController(profileControler, this);
+            //PresentViewController(profileControler, false, null);
         }
     }
 }
