@@ -128,8 +128,7 @@ namespace ClipperIOS
             {
                 if (selectedImgs.Count > 0)
                 {
-                     selectedImgs = new List<UIImage>();
-                     selectedUrl = new List<string>();
+                     selectedImgs = new List<UIImage>() { image};
                 }
 
                 selectedImgs.Add(image);

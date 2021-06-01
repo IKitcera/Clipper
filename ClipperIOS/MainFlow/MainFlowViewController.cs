@@ -25,9 +25,11 @@ namespace ClipperIOS
         {
             base.ViewDidLoad();
 
-            if (!isOwn) 
-                Settings = ((MainTabNavController)ParentViewController).Settings;
-            userId = Settings.GetUserID();
+            if (userId == null || userId == "")
+            {
+                    Settings ??= ((MainTabNavController)ParentViewController).Settings;
+                    userId = Settings.GetUserID();
+            }
 
             homeViewModel = new HomeViewModel(userId, isOwn);
 
@@ -42,24 +44,28 @@ namespace ClipperIOS
             }
                
             var permissions = Photos.PHPhotoLibrary.AuthorizationStatus;
-            if (Settings.GetStoragePermission() == false)
+
+            if (Settings != null)
             {
-                switch (permissions)
+                if (Settings.GetStoragePermission() == false)
                 {
-                    case Photos.PHAuthorizationStatus.NotDetermined:
-                        Photos.PHPhotoLibrary.RequestAuthorization((p) =>
-                        {
-                            switch (p)
+                    switch (permissions)
+                    {
+                        case Photos.PHAuthorizationStatus.NotDetermined:
+                            Photos.PHPhotoLibrary.RequestAuthorization((p) =>
                             {
-                                case Photos.PHAuthorizationStatus.Denied:
-                                    Settings.saveStoragePermission(false);
-                                    break;
-                                case Photos.PHAuthorizationStatus.Authorized:
-                                    Settings.saveStoragePermission(true);
-                                    break;
-                            }
-                        });
-                        break;
+                                switch (p)
+                                {
+                                    case Photos.PHAuthorizationStatus.Denied:
+                                        Settings.saveStoragePermission(false);
+                                        break;
+                                    case Photos.PHAuthorizationStatus.Authorized:
+                                        Settings.saveStoragePermission(true);
+                                        break;
+                                }
+                            });
+                            break;
+                    }
                 }
             }
         }
@@ -72,14 +78,29 @@ namespace ClipperIOS
                 table.ScrollToRow(indexPath, UITableViewScrollPosition.Top, false);
         }
 
+        /*
         public void ShowUsersProfile(string userId)
         {
             var profileControler = Storyboard.InstantiateViewController("ProfileController") as ProfileViewController;
             profileControler.userId = userId;
             profileControler.isOwn = false;
-            profileControler.Settings = Settings;
+
             ShowViewController(profileControler, this);
-            //PresentViewController(profileControler, false, null);
+        }
+        */
+
+        public void ShowUsersProfile(string userId)
+        {
+            var mainController = Storyboard.InstantiateViewController("MainNav") as MainTabNavController;
+            var profileControler = mainController.ViewControllers.Where(controler => controler is ProfileViewController).FirstOrDefault() as ProfileViewController;
+
+            profileControler.userId = userId;
+            profileControler.isOwn = false;
+
+            mainController.SelectedViewController = profileControler;
+            mainController.Settings = ((MainTabNavController)ParentViewController).Settings;
+
+            ShowViewController(mainController, this);
         }
     }
 }

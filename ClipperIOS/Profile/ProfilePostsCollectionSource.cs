@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CoreGraphics;
 using UIKit;
 
@@ -9,21 +10,17 @@ namespace ClipperIOS
     {
         List<UIImage> images;
         ProfileViewController owner;
-        public ProfilePostsCollectionSource(List<string> imgs, ProfileViewController profileController)
+        public ProfilePostsCollectionSource(List<UIImage> images, ProfileViewController profileController)
         {
-            images = new List<UIImage>();
-
-            foreach(var img in imgs)
-            {
-                var uiimage = ImageProcessing.ImgFromUrl(img);
-
-                if (uiimage == null)
-                    uiimage = ImageProcessing.DecodeImg(img);
-
-                images.Add(uiimage);
-            }
+            this.images = images;
+            this.owner = profileController;
+        }
+        public ProfilePostsCollectionSource(List<string> urls, ProfileViewController profileController)
+        {
+            images = ImageProcessing.LoadImages(urls).Result;
 
             owner = profileController;
+          
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -45,5 +42,6 @@ namespace ClipperIOS
 
             return cell;
         }
+
     }
 }

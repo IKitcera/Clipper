@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UIKit;
 
 namespace ClipperIOS
@@ -25,21 +26,28 @@ namespace ClipperIOS
         {
             base.ViewDidLoad();
 
-            if (isOwn)
+            if (userId == null || userId == "")
             {
-                Settings = ((MainTabNavController)ParentViewController).Settings;
+                Settings ??= ((MainTabNavController)ParentViewController).Settings;
                 userId = Settings.GetUserID();
             }
-            else
+
+            backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
+
+            if (!isOwn)
             {
                 backBtn.Hidden = false;
-                backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
+                
             }
-            profileViewModel = new ProfileViewModel(userId);
+
+            profileViewModel ??= new ProfileViewModel(userId);
 
             postsCollectionView.ContentMode = UIViewContentMode.Center;
 
-            postsCollectionView.DataSource = new ProfilePostsCollectionSource(profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList(), this);
+            var images = profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList();
+            //images.Reverse();
+
+            postsCollectionView.DataSource ??= new ProfilePostsCollectionSource(images, this);
 
             userNameLabel.Text = profileViewModel.Name;
             aboutMyselfLabel.Text = profileViewModel.TextAbout;
@@ -49,8 +57,9 @@ namespace ClipperIOS
                 avtr = ImageProcessing.ImgFromUrl(profileViewModel.Avatar);
             else
                 avtr = ImageProcessing.ImgFromUrl("https://cdn1.vectorstock.com/i/thumb-large/72/35/male-avatar-profile-icon-round-man-face-vector-18307235.jpg");
+            avtrImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             avtrImageView.Image = avtr;
-            avtrImageView.Layer.CornerRadius = avtrImageView.Frame.Size.Height / 2;
+            avtrImageView.Layer.CornerRadius = avtrImageView.Frame.Height/2;
             avtrImageView.ClipsToBounds = true;
 
             postsCount.Text = profileViewModel.PhotoPosts.Count.ToString();
@@ -61,25 +70,38 @@ namespace ClipperIOS
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-
-            postsCount.Text = profileViewModel.PhotoPosts.Count.ToString();
-            postsCollectionView.DataSource = new ProfilePostsCollectionSource(profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList(), this);
-    
+            UISwipeGestureRecognizer SwipeRec = new UISwipeGestureRecognizer();
+           
         }
+        public async Task UpdateCollectionInBackground()
+        {
+            userId ??= Settings.GetUserID();
+
+            profileViewModel = new ProfileViewModel(userId);
+
+            var items = profileViewModel.PhotoPosts.Select(pp => pp.Images.ElementAt(0)).ToList();
+
+            var images = await ImageProcessing.LoadImages(items);
+            postsCollectionView.DataSource = new ProfilePostsCollectionSource(images, this);
+        }
+
         public void ShowPostsFlow(NSIndexPath nspath)
         {
-            var mainFlowController = Storyboard.InstantiateViewController("MainFlowController") as MainFlowViewController;
-            if(Settings == null)
-                Settings = ((MainTabNavController)ParentViewController).Settings;
+            var mainController = Storyboard.InstantiateViewController("MainNav") as MainTabNavController;
+            var mainFlowController = mainController.ViewControllers.Where(controler => controler is MainFlowViewController).FirstOrDefault() as MainFlowViewController;
 
-            if(isOwn)
-                mainFlowController.isOwn = true;
-           
+            mainFlowController.isOwn = true;
+
             mainFlowController.indexPath = nspath;
-            mainFlowController.Settings = Settings;
-            //PresentViewController(mainFlowController,false, null);
-            ShowViewController(mainFlowController, this);
-            
+
+            var posts = profileViewModel.PhotoPosts;
+           // posts.Reverse();
+            mainFlowController.userId = posts[nspath.Row].UserId;
+
+            mainController.SelectedViewController = mainFlowController;
+            mainController.Settings = ((MainTabNavController)ParentViewController).Settings;
+
+            ShowViewController(mainController, this);
         }
     }
 }

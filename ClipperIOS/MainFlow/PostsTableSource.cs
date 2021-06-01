@@ -48,21 +48,26 @@ namespace ClipperIOS
                 cell.scroll.ScrollEnabled = false;
 
             cell.scroll.ContentSize = new CoreGraphics.CGSize(cell.scroll.VisibleSize.Width * (nfloat)post.Images.Count, cell.scroll.VisibleSize.Height);
-      
+
+            int i = 0;
             foreach (var img in post.Images)
             { 
                 var image = ImageProcessing.ImgFromUrl(img);
 
-                var i = post.Images.IndexOf(img);
                 var iv = new UIImageView(new CoreGraphics.CGRect(cell.scroll.VisibleSize.Width * (nfloat)i, 0, cell.scroll.VisibleSize.Width, cell.scroll.VisibleSize.Height));
-
-                iv.Image = image;
+   
                 iv.ContentMode = UIViewContentMode.ScaleAspectFit;
+                iv.Image = image;
                 iv.BackgroundColor = UIColor.White;
                 cell.scroll.AddSubview(iv);
+
+                i++;
             }
 
             cell.pageControl.Pages = post.Images.Count;
+            cell.scroll.PagingEnabled = true;
+            cell.scroll.UserInteractionEnabled = true;
+
             cell.scroll.Scrolled += (sender, e) =>
             {
                 var sc = sender as UIScrollView;

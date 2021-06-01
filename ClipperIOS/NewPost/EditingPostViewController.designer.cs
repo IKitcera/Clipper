@@ -13,25 +13,33 @@ namespace ClipperIOS
 	partial class EditingPostViewController
 	{
 		[Outlet]
-		public UIKit.UIButton backBtn { get; set; }
+		public UIKit.UIButton backBtn { get; private set; }
 
 		[Outlet]
-		public UIKit.UIPageControl pageCntrl { get; set; }
+		public UIKit.UIPageControl pageCntrl { get; private set; }
 
 		[Outlet]
-		public UIKit.UIButton postBtn { get; set; }
+		public UIKit.UIButton postBtn { get; private set; }
 
 		[Outlet]
-		public UIKit.UIScrollView scroll { get; set; }
+		UIKit.UIProgressView progressBar { get; set; }
 
 		[Outlet]
-		public UIKit.UITextField txtBelow { get; set; }
+		public UIKit.UIScrollView scroll { get; private set; }
+
+		[Outlet]
+		public UIKit.UITextField txtBelow { get; private set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (scroll != null) {
-				scroll.Dispose ();
-				scroll = null;
+			if (progressBar != null) {
+				progressBar.Dispose ();
+				progressBar = null;
+			}
+
+			if (backBtn != null) {
+				backBtn.Dispose ();
+				backBtn = null;
 			}
 
 			if (pageCntrl != null) {
@@ -39,19 +47,19 @@ namespace ClipperIOS
 				pageCntrl = null;
 			}
 
-			if (txtBelow != null) {
-				txtBelow.Dispose ();
-				txtBelow = null;
-			}
-
 			if (postBtn != null) {
 				postBtn.Dispose ();
 				postBtn = null;
 			}
 
-			if (backBtn != null) {
-				backBtn.Dispose ();
-				backBtn = null;
+			if (scroll != null) {
+				scroll.Dispose ();
+				scroll = null;
+			}
+
+			if (txtBelow != null) {
+				txtBelow.Dispose ();
+				txtBelow = null;
 			}
 		}
 	}

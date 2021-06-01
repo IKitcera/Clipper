@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Foundation;
 using UIKit;
 
@@ -19,6 +21,7 @@ namespace ClipperIOS
             }
             catch
             {
+                //TODO: Write logic, not here of course, in case of internet fallout 
                 return new UIImage(uri);
             }
         }
@@ -63,12 +66,24 @@ namespace ClipperIOS
             path += ".jpg";
 
             if (File.Exists(path))
-                path.Insert(path.Length - 4 - 1, "1");
+                path = path.Insert(path.Length - 4 - 1, "1");
             FileStream fs = new FileStream(path, FileMode.Create);
             fs.Write(new ReadOnlySpan<byte>(bytes));
             fs.Close();
 
             return new NSUrl(path);
+        }
+        public static async Task<List<UIImage>> LoadImages(List<string> UrlS)
+        {
+            List<UIImage> images = new List<UIImage>();
+            foreach (var url in UrlS)
+                images.Add(await LoadOne(url));
+            return images;
+
+        }
+        public static async Task<UIImage> LoadOne(string url)
+        {
+            return ImageProcessing.ImgFromUrl(url);
         }
 
     }

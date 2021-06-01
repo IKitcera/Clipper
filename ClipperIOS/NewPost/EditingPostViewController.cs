@@ -62,7 +62,7 @@ namespace ClipperIOS
         }
 
 
-        private void Post()
+        private async void Post()
         {
             addViewModel = new AddViewModel();
 
@@ -87,12 +87,17 @@ namespace ClipperIOS
 
             var root = ((MainTabNavController)PresentingViewController);
             var newPostViewController = root.SelectedViewController as NewPostViewController;
+
             newPostViewController.Reset();
             root.SelectedViewController = root.ViewControllers.Where(vc => vc is MainFlowViewController).FirstOrDefault();
 
+            var profileController = root.ViewControllers.Where(vc => vc is ProfileViewController).FirstOrDefault() as ProfileViewController;
+
+            profileController.Settings ??= root.Settings;
+
+
+            await profileController.UpdateCollectionInBackground();
             DismissViewController(false, () => newPostViewController.DismissViewController(false, null));
-            // = root.ViewControllers.Where(vc => vc as MainFlowViewController != null).FirstOrDefault();
-           
         }
     }
 }
