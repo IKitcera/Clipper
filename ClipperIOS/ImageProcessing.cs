@@ -21,8 +21,14 @@ namespace ClipperIOS
             }
             catch
             {
-                //TODO: Write logic, not here of course, in case of internet fallout 
-                return new UIImage(uri);
+                try
+                {
+                    return new UIImage(uri);
+                }
+                catch
+                {
+                    return new UIImage("Assets/600px-No_image_available.svg.png");
+                }
             }
         }
 
@@ -60,7 +66,8 @@ namespace ClipperIOS
 
             var newName = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() +
                 DateTime.Now.Day.ToString() + "_" + DateTime.Now.Hour.ToString() +
-                DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+                DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() +
+                DateTime.Now.Millisecond;
 
             path = Path.Combine(path, newName);
             path += ".jpg";

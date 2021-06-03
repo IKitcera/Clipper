@@ -120,6 +120,11 @@
     <Compile Include="MainFlow\PostItemCell.designer.cs">
       <DependentUpon>PostItemCell.cs</DependentUpon>
     </Compile>
+    <BundleResource Include="Assets\600px-No_image_available.svg.png" />
+    <Compile Include="CameraViewController.cs" />
+    <Compile Include="CameraViewController.designer.cs">
+      <DependentUpon>CameraViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -214,6 +219,7 @@
     <Folder Include="Profile\" />
     <Folder Include="MainFlow\" />
     <Folder Include="NewPost\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

@@ -105,8 +105,6 @@ namespace ClipperIOS
             };
 
             doneManyBtn.TouchUpInside += (sender, e) => PerformSegue("PostEditing", this);
-
-
         }
 
         public void Reset()
@@ -137,16 +135,20 @@ namespace ClipperIOS
             }
             else
             {
+                
                 if (!selectedImgs.Contains(image))
                 {
-                    selectedImgs.Add(image);
-
-                    checkBtn.Hidden = false;
+                    if (selectedImgs.Count == 10)
+                        (this as UIViewController).ShowToast("You could clip up to 10 photos", 3);
+                    else
+                    {
+                        selectedImgs.Add(image);
+                        checkBtn.Hidden = false;
+                    }
                 }
                 else
                 {
                     selectedImgs.Remove(image);
-
                     checkBtn.Hidden = true;
                 }
             }

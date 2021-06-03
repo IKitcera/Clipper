@@ -10,11 +10,13 @@ namespace ClipperIOS
     {
         List<UIImage> images;
         ProfileViewController owner;
+
         public ProfilePostsCollectionSource(List<UIImage> images, ProfileViewController profileController)
         {
             this.images = images;
             this.owner = profileController;
         }
+
         public ProfilePostsCollectionSource(List<string> urls, ProfileViewController profileController)
         {
             images = ImageProcessing.LoadImages(urls).Result;

@@ -31,7 +31,7 @@ namespace ClipperIOS
         }
         public override void ItemSelected(UITabBar tabbar, UITabBarItem item)
         {
-            ResetAll();
+           // ResetAll();
         }
         private void ResetAll()
         {

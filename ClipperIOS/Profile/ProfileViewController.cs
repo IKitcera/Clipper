@@ -13,6 +13,7 @@ namespace ClipperIOS
     public partial class ProfileViewController : UIViewController
     {
         private ProfileViewModel profileViewModel;
+        private ProfilePostsCollectionSource postsSource;
 
         public UserSettings Settings { get; set; }
         public string userId { get; set; }
@@ -42,12 +43,16 @@ namespace ClipperIOS
 
             profileViewModel ??= new ProfileViewModel(userId);
 
-            postsCollectionView.ContentMode = UIViewContentMode.Center;
+            postsCollectionView.ContentMode = UIViewContentMode.Left;
 
             var images = profileViewModel.PhotoPosts.Select(x => x.Images[0]).ToList();
             //images.Reverse();
 
-            postsCollectionView.DataSource ??= new ProfilePostsCollectionSource(images, this);
+            if (postsCollectionView.DataSource == null)
+                if (postsSource == null)
+                    postsCollectionView.DataSource = new ProfilePostsCollectionSource(images, this);
+                else
+                    postsCollectionView.DataSource = postsSource;
 
             userNameLabel.Text = profileViewModel.Name;
             aboutMyselfLabel.Text = profileViewModel.TextAbout;
@@ -62,7 +67,7 @@ namespace ClipperIOS
             avtrImageView.Layer.CornerRadius = avtrImageView.Frame.Height/2;
             avtrImageView.ClipsToBounds = true;
 
-            postsCount.Text = profileViewModel.PhotoPosts.Count.ToString();
+           
             subscribersCount.Text = profileViewModel.Subscribers.ToString();
             subscribingsCount.Text = profileViewModel.Subscribings.ToString();
         }
@@ -70,19 +75,29 @@ namespace ClipperIOS
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            UISwipeGestureRecognizer SwipeRec = new UISwipeGestureRecognizer();
-           
+
+            var pCount = profileViewModel.PhotoPosts.Count;
+            postsCount.Text = pCount.ToString();
+
+            var itemsCountOfDataSource = postsCollectionView.DataSource.GetItemsCount(postsCollectionView, 0);
+            if (itemsCountOfDataSource < pCount)
+            {
+                 postsCollectionView.DataSource = postsSource;
+                 postsCollectionView.ReloadData();
+            }
         }
+
         public async Task UpdateCollectionInBackground()
         {
             userId ??= Settings.GetUserID();
 
             profileViewModel = new ProfileViewModel(userId);
-
+            
             var items = profileViewModel.PhotoPosts.Select(pp => pp.Images.ElementAt(0)).ToList();
-
+            
             var images = await ImageProcessing.LoadImages(items);
-            postsCollectionView.DataSource = new ProfilePostsCollectionSource(images, this);
+
+            postsSource = new ProfilePostsCollectionSource(images, this);
         }
 
         public void ShowPostsFlow(NSIndexPath nspath)
@@ -102,6 +117,8 @@ namespace ClipperIOS
             mainController.Settings = ((MainTabNavController)ParentViewController).Settings;
 
             ShowViewController(mainController, this);
+          
         }
     }
+
 }

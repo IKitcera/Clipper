@@ -66,25 +66,25 @@ namespace ClipperIOS
         {
             addViewModel = new AddViewModel();
 
-            addViewModel.Title = txtBelow.Text;
+            if (txtBelow.Text != "")
+                addViewModel.Title = txtBelow.Text;
+            else
+                addViewModel.Title = " ";
 
             uris = new List<string>();
             foreach (var i in images)
-            {
                 uris.Add(ImageProcessing.SaveImg(i).ToString());
-            }
             addViewModel.Photos = uris;
 
             var successfully = addViewModel.AddNewPost(userId);
 
-            UIAlertController alert = new UIAlertController();
+            string Message;
 
             if (successfully)
-                alert.Message = "You have made a new post successfully !";
+                Message = "Successfully posted!";
             else
-                alert.Message = "An error was occured";
-
-
+                Message = "An error was occured";
+          
             var root = ((MainTabNavController)PresentingViewController);
             var newPostViewController = root.SelectedViewController as NewPostViewController;
 
@@ -95,8 +95,12 @@ namespace ClipperIOS
 
             profileController.Settings ??= root.Settings;
 
+            (this as UIViewController).ShowToast(Message, 3);
+
+            
 
             await profileController.UpdateCollectionInBackground();
+
             DismissViewController(false, () => newPostViewController.DismissViewController(false, null));
         }
     }

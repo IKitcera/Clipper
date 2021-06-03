@@ -50,9 +50,27 @@ namespace ClipperIOS
             cell.scroll.ContentSize = new CoreGraphics.CGSize(cell.scroll.VisibleSize.Width * (nfloat)post.Images.Count, cell.scroll.VisibleSize.Height);
 
             int i = 0;
+            var images = ImageProcessing.LoadImages(post.Images).Result;
+
+            cell.scroll.PagingEnabled = true;
+            cell.scroll.UserInteractionEnabled = true;
+            cell.scroll.ScrollEnabled = true;
+
+            foreach (var img in images)
+            {
+                var iv = new UIImageView(new CoreGraphics.CGRect(cell.scroll.VisibleSize.Width * (nfloat)i, 0, cell.scroll.VisibleSize.Width, cell.scroll.VisibleSize.Height));
+
+                iv.ContentMode = UIViewContentMode.ScaleAspectFit;
+                iv.Image = img;
+                iv.BackgroundColor = UIColor.White;
+                cell.scroll.AddSubview(iv);
+
+                i++;
+            }
+            /*
             foreach (var img in post.Images)
             { 
-                var image = ImageProcessing.ImgFromUrl(img);
+                var image = ImageProcessing..ImgFromUrl(img);
 
                 var iv = new UIImageView(new CoreGraphics.CGRect(cell.scroll.VisibleSize.Width * (nfloat)i, 0, cell.scroll.VisibleSize.Width, cell.scroll.VisibleSize.Height));
    
@@ -63,11 +81,10 @@ namespace ClipperIOS
 
                 i++;
             }
-
+            */
             cell.pageControl.Pages = post.Images.Count;
-            cell.scroll.PagingEnabled = true;
-            cell.scroll.UserInteractionEnabled = true;
-
+      
+          
             cell.scroll.Scrolled += (sender, e) =>
             {
                 var sc = sender as UIScrollView;
