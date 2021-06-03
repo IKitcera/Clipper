@@ -1,5 +1,7 @@
 ﻿using System;
+using AVFoundation;
 using CoreFoundation;
+using CoreMedia;
 using UIKit;
 
 namespace ClipperIOS
@@ -36,6 +38,12 @@ namespace ClipperIOS
                         System.Threading.Tasks.Task.Delay(1500).Wait();
                         controller.BeginInvokeOnMainThread(() => alert.DismissViewController(true, null));
                     });
+        }
+
+        public static void CaptureOutput(this CameraViewController cameraController,
+            AVCaptureOutput output, CMSampleBuffer buffer, AVCaptureConnection connection)
+        {
+
         }
     }
 }

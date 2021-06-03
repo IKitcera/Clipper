@@ -12,9 +12,23 @@ namespace ClipperIOS
 	[Register ("CameraViewController")]
 	partial class CameraViewController
 	{
+		[Outlet]
+		UIKit.UIButton backBtn { get; set; }
+
+		[Outlet]
+		UIKit.UILabel notAvailableLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (notAvailableLabel != null) {
+				notAvailableLabel.Dispose ();
+				notAvailableLabel = null;
+			}
+
+			if (backBtn != null) {
+				backBtn.Dispose ();
+				backBtn = null;
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tka-6p-26J">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -190,6 +191,9 @@
                                 <state key="normal" title="Button">
                                     <imageReference key="image" image="camera.fill" catalog="system" symbolScale="large"/>
                                 </state>
+                                <connections>
+                                    <segue destination="pc6-us-Wfk" kind="presentation" identifier="CameraCapture" id="H2q-io-7Na"/>
+                                </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s0n-Z5-KDM">
                                 <rect key="frame" x="345" y="61" width="26" height="22"/>
@@ -472,7 +476,7 @@
         <!--Camera View Controller-->
         <scene sceneID="fq9-fZ-tTE">
             <objects>
-                <viewController id="pc6-us-Wfk" customClass="CameraViewController" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="pc6-us-Wfk" customClass="CameraViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8aT-AQ-HAz"/>
                         <viewControllerLayoutGuide type="bottom" id="9px-Hy-QHs"/>
@@ -480,12 +484,34 @@
                     <view key="view" contentMode="scaleToFill" id="yys-Ql-6Ww">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Camera preview is not available" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A2k-W8-yA3">
+                                <rect key="frame" x="114" y="364" width="187" height="168"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FHG-uW-fIb">
+                                <rect key="frame" x="20" y="44" width="78" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title=" Back">
+                                    <color key="titleColor" systemColor="linkColor"/>
+                                    <imageReference key="image" image="arrow.backward" catalog="system" symbolScale="large"/>
+                                </state>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="backBtn" destination="FHG-uW-fIb" id="u2E-hv-y7o"/>
+                        <outlet property="notAvailableLabel" destination="A2k-W8-yA3" id="Zck-rg-elQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="11u-NL-uzo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1517" y="-570"/>
+            <point key="canvasLocation" x="1515.9420289855075" y="-570.53571428571422"/>
         </scene>
         <!--MainNav-->
         <scene sceneID="zbn-ZV-yUL">

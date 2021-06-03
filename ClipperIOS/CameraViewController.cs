@@ -9,7 +9,7 @@ using CoreFoundation;
 
 namespace ClipperIOS
 {
-	public partial class CameraViewController : UIViewController
+	public partial class CameraViewController : UIViewController, IAVCaptureVideoDataOutputSampleBufferDelegate
 	{
         private AVCaptureSession captureSession;
 
@@ -18,6 +18,12 @@ namespace ClipperIOS
 
         private AVCaptureInput frontInput;
         private AVCaptureInput backInput;
+
+        private AVCaptureVideoPreviewLayer previewLayer;
+
+        private AVCaptureVideoDataOutput videoOutput;
+
+        bool takePicture = false;
 
         public CameraViewController (IntPtr handle) : base (handle)
 		{
@@ -29,6 +35,7 @@ namespace ClipperIOS
             base.ViewDidLoad();
 
             SetupView();
+            backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
         }
 
         public override void ViewDidAppear(bool animated)
@@ -36,6 +43,8 @@ namespace ClipperIOS
             base.ViewDidAppear(animated);
 
             //Check for permission first
+            notAvailableLabel.Hidden = true;
+
             SetupAndStartCameraSession();
         }
         #endregion
@@ -55,11 +64,14 @@ namespace ClipperIOS
 
                 SetupInputs();
 
+                BeginInvokeOnMainThread(() => SetupPreviewLayer());
+
+                SetupOutput();
+
                 captureSession.CommitConfiguration();
                 captureSession.StartRunning();
 
             });
-
         }
 
         public void SetupView()
@@ -96,14 +108,34 @@ namespace ClipperIOS
                     throw new Exception();
 
                 captureSession.AddInput(frontInput);
+                captureSession.AddInput(backInput);
             }
             catch
             {
-                throw new Exception("Input config error");
+                BeginInvokeOnMainThread(() => notAvailableLabel.Hidden = false);
             }
-            captureSession.AddInput(backInput);
-
         }
+
+        public void SetupOutput()
+        {
+            videoOutput = new AVCaptureVideoDataOutput();
+            var videoQueue = new DispatchQueue("videoQueue"); //qos : .userInteractive
+            videoOutput.SetSampleBufferDelegateQueue(this, videoQueue);
+
+            if (captureSession.CanAddOutput(videoOutput))
+                captureSession.AddOutput(videoOutput);
+            else
+                notAvailableLabel.Hidden = false;
+        }
+
+        public void SetupPreviewLayer()
+        {
+            previewLayer = new AVCaptureVideoPreviewLayer(captureSession);
+            View.Layer.InsertSublayer(previewLayer, 0);
+            previewLayer.Frame = View.Layer.Frame;
+        }
+
+        public void CaptureOutput() { }
         #endregion
     }
 }

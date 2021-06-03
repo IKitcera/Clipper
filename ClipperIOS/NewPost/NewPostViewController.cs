@@ -67,6 +67,15 @@ namespace ClipperIOS
                     editController.userId = userId;
                 }
             }
+            else if(segue.Identifier == "CameraCapture")
+            {
+                var cameraController = segue.DestinationViewController as CameraViewController;
+
+                if(cameraController != null)
+                {
+
+                }
+            }
         }
 
         public void Init()
@@ -105,6 +114,7 @@ namespace ClipperIOS
             };
 
             doneManyBtn.TouchUpInside += (sender, e) => PerformSegue("PostEditing", this);
+            takePictureBtn.TouchUpInside += (sender, e) => PerformSegue("CameraCapture", this);
         }
 
         public void Reset()
