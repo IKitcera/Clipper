@@ -35,6 +35,26 @@ namespace ClipperIOS
         {
             var cell = (ProfileImgShortCell)collectionView.DequeueReusableCell("profilePostsViewCell", indexPath);
 
+            var index = indexPath.Row % 3;
+
+            var a = collectionView.Frame.Width / 3.0;
+
+            double offsetX = 0;
+            switch (index)
+            {
+                case 0:
+                    offsetX = 0;
+                    break;
+                case 1:
+                    offsetX = a;
+                    break;
+                case 2:
+                    offsetX = 2 * a;
+                    break;
+            }
+
+            cell.Frame = new CGRect(offsetX, ((int)(indexPath.Row / 3.0)) * a, a, a);
+
             cell.img.ContentMode = UIViewContentMode.ScaleAspectFill;
             cell.img.Image = images[indexPath.Row];
 

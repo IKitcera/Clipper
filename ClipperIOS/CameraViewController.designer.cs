@@ -16,7 +16,19 @@ namespace ClipperIOS
 		UIKit.UIButton backBtn { get; set; }
 
 		[Outlet]
+		UIKit.UIButton lightBtn { get; set; }
+
+		[Outlet]
 		UIKit.UILabel notAvailableLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView postImageView { get; set; }
+
+		[Outlet]
+		UIKit.UIButton rotateCameraBtn { get; set; }
+
+		[Outlet]
+		UIKit.UIButton takePictureBtn { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -28,6 +40,26 @@ namespace ClipperIOS
 			if (backBtn != null) {
 				backBtn.Dispose ();
 				backBtn = null;
+			}
+
+			if (lightBtn != null) {
+				lightBtn.Dispose ();
+				lightBtn = null;
+			}
+
+			if (postImageView != null) {
+				postImageView.Dispose ();
+				postImageView = null;
+			}
+
+			if (rotateCameraBtn != null) {
+				rotateCameraBtn.Dispose ();
+				rotateCameraBtn = null;
+			}
+
+			if (takePictureBtn != null) {
+				takePictureBtn.Dispose ();
+				takePictureBtn = null;
 			}
 		}
 	}

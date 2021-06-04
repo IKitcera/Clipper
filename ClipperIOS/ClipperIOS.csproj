@@ -49,10 +49,11 @@
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: kitceraivanka@gmail.com (JXY7R7QL87)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchLink>SdkOnly</MtouchLink>
     <LangVersion>default</LangVersion>
+<AssemblyOriginatorKeyFile>..\..\38cfe4d0-d0b7-436c-a5a9-ded52eeee1f9.mobileprovision</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -65,6 +66,8 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchLink>SdkOnly</MtouchLink>
     <LangVersion>default</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\38cfe4d0-d0b7-436c-a5a9-ded52eeee1f9.mobileprovision</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />

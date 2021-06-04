@@ -86,6 +86,7 @@ namespace ClipperIOS
             var fetchResults = PHAsset.FetchAssets(PHAssetMediaType.Image, options);
 
             libraryPhotos.DataSource = new CollectionViewSource(fetchResults, this);
+          
 
             selectedImgs = new List<UIImage>();
             selectedUrl = new List<string>();
@@ -116,7 +117,6 @@ namespace ClipperIOS
             doneManyBtn.TouchUpInside += (sender, e) => PerformSegue("PostEditing", this);
             takePictureBtn.TouchUpInside += (sender, e) => PerformSegue("CameraCapture", this);
         }
-
         public void Reset()
         {
 
@@ -193,6 +193,26 @@ namespace ClipperIOS
             
             var cell = (PhotoShortCut)collectionView.DequeueReusableCell("collectionCell", indexPath);
 
+            var index = indexPath.Row % 3;
+
+            var a = collectionView.Frame.Width/3.0;
+
+            double offsetX = 0;
+            switch (index)
+            {
+                case 0:
+                    offsetX = 0;
+                    break;
+                case 1:
+                    offsetX = a;
+                    break;
+                case 2:
+                    offsetX = 2 * a;
+                    break;
+            }
+
+            cell.Frame = new CGRect(offsetX, ((int)(indexPath.Row / 3.0))*a, a, a);
+
             NSDictionary inf = new NSDictionary();
 
             imageMngr.RequestImageForAsset(
@@ -207,11 +227,9 @@ namespace ClipperIOS
                     inf = info;
                 });
 
-            string fname = (NSString)((PHAsset)result[(int)indexPath.Row]).ValueForKey((NSString)"filename");
-            string encodedImg = ImageProcessing.EncodeImg(cell.img.Image);
-
+           
             cell.imgBtn.TouchUpInside += (sender, e) => postViewController.PreparePost(cell.img.Image, cell.check);
-
+            
             cells.Add(cell);
 
             return cell;

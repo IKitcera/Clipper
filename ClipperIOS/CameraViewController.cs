@@ -6,11 +6,14 @@ using Foundation;
 using UIKit;
 using AVFoundation;
 using CoreFoundation;
+using CoreMedia;
+using CoreImage;
 
 namespace ClipperIOS
 {
 	public partial class CameraViewController : UIViewController, IAVCaptureVideoDataOutputSampleBufferDelegate
 	{
+        public bool CameraPermisiion;
         private AVCaptureSession captureSession;
 
         private AVCaptureDevice backCamera;
@@ -24,6 +27,7 @@ namespace ClipperIOS
         private AVCaptureVideoDataOutput videoOutput;
 
         bool takePicture = false;
+        bool backCameraOn = true;
 
         public CameraViewController (IntPtr handle) : base (handle)
 		{
@@ -34,22 +38,55 @@ namespace ClipperIOS
         {
             base.ViewDidLoad();
 
+            
             SetupView();
             backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
-        }
+            takePictureBtn.TouchUpInside += (sender, e) => takePicture = true;
+            rotateCameraBtn.TouchUpInside += (sender, e) => SwitchCameraInput();
+           
+         }
 
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 
             //Check for permission first
-            notAvailableLabel.Hidden = true;
+            if (CheckPermission())
+            {
+                SetupAndStartCameraSession();
+                notAvailableLabel.Hidden = true;
+            }
+            else
+                notAvailableLabel.Hidden = false;
 
-            SetupAndStartCameraSession();
+
         }
         #endregion
 
         #region Methods
+
+        public bool CheckPermission()
+        {
+            var permission = AVCaptureDevice.GetAuthorizationStatus(AVAuthorizationMediaType.Video);
+
+            bool returningPermission = false;
+            if (!CameraPermisiion)
+            {
+                if (permission == AVAuthorizationStatus.NotDetermined ||
+                    permission == AVAuthorizationStatus.Denied)
+                        AVCaptureDevice.RequestAccessForMediaType(AVAuthorizationMediaType.Video, p =>
+                        {
+                            if (p)
+                                returningPermission = true;
+                        });
+                else
+                    returningPermission = true;
+            }
+            else
+                returningPermission = true;
+            return returningPermission;
+        }
+
         public void SetupAndStartCameraSession()
         {
             DispatchQueue.DefaultGlobalQueue.DispatchAsync(() =>
@@ -82,7 +119,6 @@ namespace ClipperIOS
         public void SetupInputs()
         {
 
-            //TODO: if there`s no front or back camera
             frontCamera = AVCaptureDevice.GetDefaultDevice(AVCaptureDeviceType.BuiltInWideAngleCamera, AVMediaTypes.Video, AVCaptureDevicePosition.Front);
             backCamera = AVCaptureDevice.GetDefaultDevice(AVCaptureDeviceType.BuiltInWideAngleCamera, AVMediaTypes.Video, AVCaptureDevicePosition.Back);
 
@@ -104,15 +140,15 @@ namespace ClipperIOS
                     backInput = input;
                 }
 
-                if (!captureSession.CanAddInput(frontInput))
-                    throw new Exception();
+                 if(captureSession.CanAddInput(frontInput))
+                    captureSession.AddInput(frontInput);
 
-                captureSession.AddInput(frontInput);
-                captureSession.AddInput(backInput);
+                 if (captureSession.CanAddInput(backInput))
+                    captureSession.AddInput(backInput);
             }
-            catch
+            catch 
             {
-                BeginInvokeOnMainThread(() => notAvailableLabel.Hidden = false);
+                notAvailableLabel.Hidden = false;
             }
         }
 
@@ -126,6 +162,8 @@ namespace ClipperIOS
                 captureSession.AddOutput(videoOutput);
             else
                 notAvailableLabel.Hidden = false;
+
+            videoOutput.Connections[0].VideoOrientation = AVCaptureVideoOrientation.Portrait;
         }
 
         public void SetupPreviewLayer()
@@ -135,7 +173,45 @@ namespace ClipperIOS
             previewLayer.Frame = View.Layer.Frame;
         }
 
-        public void CaptureOutput() { }
+        public void CaptureOutput(AVCaptureOutput output, CMSampleBuffer buffer, AVCaptureConnection connection)
+        {
+            if (!takePicture)
+                return;
+
+            var cvBuffer = buffer.GetImageBuffer();
+            var ciImage = new CIImage(cvBuffer);
+            var uiImage = new UIImage(ciImage);
+
+            DispatchQueue.MainQueue.DispatchAsync(() =>
+            {
+                postImageView.Image = uiImage;
+                takePicture = false;
+            });
+        }
+
+        public void SwitchCameraInput()
+        {
+            rotateCameraBtn.UserInteractionEnabled = false ;
+            captureSession.BeginConfiguration();
+
+            if (backCameraOn)
+            {
+                captureSession.RemoveInput(backInput);
+                captureSession.AddInput(frontInput);
+                backCameraOn = false;
+            }
+            else
+            {
+                captureSession.RemoveInput(frontInput);
+                captureSession.AddInput(backInput);
+                backCameraOn = true;
+            }
+            videoOutput.Connections[0].VideoOrientation = AVCaptureVideoOrientation.Portrait;
+
+            captureSession.CommitConfiguration();
+
+            rotateCameraBtn.UserInteractionEnabled = true;
+        }
         #endregion
     }
 }
