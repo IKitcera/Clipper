@@ -33,6 +33,8 @@ namespace ClipperIOS
 
             loginBtn.TouchUpInside += (sender, e) => LoginClick();
 
+            uEmail.EditingDidEndOnExit += (s, e) => ResignFirstResponder();
+            uPass.EditingDidEndOnExit += (s, e) => ResignFirstResponder();
             errorLabel.Hidden = true;
             // Perform any additional setup after loading the view, typically from a nib.
         }
@@ -60,7 +62,6 @@ namespace ClipperIOS
                         uPass.Text = settings.GetUserPassword();
                  //   }
             //    }
-            preloader.Hidden = true;
             
         }
 
@@ -111,8 +112,9 @@ namespace ClipperIOS
                     errorLabel.Hidden = false;
             }
         }
-
+       
        
         #endregion
     }
+
 }

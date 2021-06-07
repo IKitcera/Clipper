@@ -22,7 +22,7 @@ namespace ClipperIOS
 		UIKit.UILabel notAvailableLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView postImageView { get; set; }
+		public UIKit.UIImageView postImageView { get; set; }
 
 		[Outlet]
 		UIKit.UIButton rotateCameraBtn { get; set; }

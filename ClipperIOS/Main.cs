@@ -28,7 +28,7 @@ namespace ClipperIOS
 
             controller.PresentViewController(alert, true, null);
 
-           // controller.BeginInvokeOnMainThread(() => System.Threading.Tasks.Task.Delay(2000).Wait());
+            // controller.BeginInvokeOnMainThread(() => System.Threading.Tasks.Task.Delay(2000).Wait());
 
             DispatchQueue.GetGlobalQueue(DispatchQueuePriority.Default).DispatchAfter(
                 new DispatchTime(DispatchTime.Now,
@@ -38,12 +38,6 @@ namespace ClipperIOS
                         System.Threading.Tasks.Task.Delay(1500).Wait();
                         controller.BeginInvokeOnMainThread(() => alert.DismissViewController(true, null));
                     });
-        }
-
-        public static void CaptureOutput(this CameraViewController cameraController,
-            AVCaptureOutput output, CMSampleBuffer buffer, AVCaptureConnection connection)
-        {
-
         }
     }
 }

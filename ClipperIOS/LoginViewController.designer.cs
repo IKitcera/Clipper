@@ -21,8 +21,6 @@ namespace ClipperIOS
 		[Outlet]
 		UIKit.UIButton loginBtn { get; set; }
 
-		[Outlet]
-		UIKit.UIActivityIndicatorView preloader { get; set; }
 
 		[Outlet]
 		UIKit.UITextField uEmail { get; set; }
@@ -32,10 +30,6 @@ namespace ClipperIOS
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (preloader != null) {
-				preloader.Dispose ();
-				preloader = null;
-			}
 
 			if (doNotLogout != null) {
 				doNotLogout.Dispose ();

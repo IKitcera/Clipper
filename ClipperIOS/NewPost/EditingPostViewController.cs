@@ -28,7 +28,9 @@ namespace ClipperIOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-      
+
+            scroll.Frame = new CGRect(0, 0, View.Frame.Width, View.Frame.Height);
+
             foreach (var img in images)
             {
                 var imgView = new UIImageView(
@@ -39,9 +41,8 @@ namespace ClipperIOS
                 imgView.Image = img;
                 scroll.AddSubview(imgView);
             }
-            scroll.ContentSize = new CoreGraphics.CGSize(
-                scroll.VisibleSize.Width * images.Count,
-                scroll.VisibleSize.Height);
+
+            scroll.ContentSize = new CGSize(scroll.Frame.Width, scroll.Frame.Height);
 
             pageCntrl.Pages = images.Count;
             
@@ -52,6 +53,8 @@ namespace ClipperIOS
 
                 pageCntrl.CurrentPage = pageCntrl.Pages - ((int)Math.Round(sc.ContentSize.Width / (offset + sc.VisibleSize.Width)));
             };
+
+            txtBelow.EditingDidEndOnExit += (sender, e) => ResignFirstResponder();
 
             backBtn.TouchUpInside += (sender, e) =>
             {

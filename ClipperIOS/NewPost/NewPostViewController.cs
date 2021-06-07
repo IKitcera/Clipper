@@ -73,7 +73,7 @@ namespace ClipperIOS
 
                 if(cameraController != null)
                 {
-
+                    cameraController.userId = userId;
                 }
             }
         }

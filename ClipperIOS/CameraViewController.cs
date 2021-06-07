@@ -8,12 +8,16 @@ using AVFoundation;
 using CoreFoundation;
 using CoreMedia;
 using CoreImage;
+using System.Collections.Generic;
 
 namespace ClipperIOS
 {
-	public partial class CameraViewController : UIViewController, IAVCaptureVideoDataOutputSampleBufferDelegate
+	public partial class CameraViewController : UIViewController//, IAVCaptureVideoDataOutputSampleBufferDelegate
 	{
         public bool CameraPermisiion;
+        public bool takePicture = false;
+        public string userId { get; set; }
+
         private AVCaptureSession captureSession;
 
         private AVCaptureDevice backCamera;
@@ -26,8 +30,8 @@ namespace ClipperIOS
 
         private AVCaptureVideoDataOutput videoOutput;
 
-        bool takePicture = false;
-        bool backCameraOn = true;
+       
+        bool backCameraOn;
 
         public CameraViewController (IntPtr handle) : base (handle)
 		{
@@ -39,14 +43,13 @@ namespace ClipperIOS
             base.ViewDidLoad();
 
             
-            SetupView();
+        //    SetupView();
             backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
-            takePictureBtn.TouchUpInside += (sender, e) => takePicture = true;
+            takePictureBtn.TouchUpInside += (sender, e) => Capture();
             rotateCameraBtn.TouchUpInside += (sender, e) => SwitchCameraInput();
-           
          }
 
-        public override void ViewDidAppear(bool animated)
+        public override void ViewWillAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 
@@ -58,8 +61,13 @@ namespace ClipperIOS
             }
             else
                 notAvailableLabel.Hidden = false;
+        }
 
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
 
+            DisposeSources();
         }
         #endregion
 
@@ -110,12 +118,6 @@ namespace ClipperIOS
 
             });
         }
-
-        public void SetupView()
-        {
-
-        }
-
         public void SetupInputs()
         {
 
@@ -140,11 +142,19 @@ namespace ClipperIOS
                     backInput = input;
                 }
 
-                 if(captureSession.CanAddInput(frontInput))
+                if (captureSession.CanAddInput(frontInput))
+                {
                     captureSession.AddInput(frontInput);
+                    backCameraOn = false;
+                }
+                    
 
                  if (captureSession.CanAddInput(backInput))
-                    captureSession.AddInput(backInput);
+                {
+                     captureSession.AddInput(backInput);
+                    backCameraOn = true;
+                }
+                   
             }
             catch 
             {
@@ -155,8 +165,11 @@ namespace ClipperIOS
         public void SetupOutput()
         {
             videoOutput = new AVCaptureVideoDataOutput();
+            var camOutput = new CameraOutput(this);
+
             var videoQueue = new DispatchQueue("videoQueue"); //qos : .userInteractive
-            videoOutput.SetSampleBufferDelegateQueue(this, videoQueue);
+       
+            videoOutput.SetSampleBufferDelegateQueue(camOutput, videoQueue);
 
             if (captureSession.CanAddOutput(videoOutput))
                 captureSession.AddOutput(videoOutput);
@@ -164,6 +177,7 @@ namespace ClipperIOS
                 notAvailableLabel.Hidden = false;
 
             videoOutput.Connections[0].VideoOrientation = AVCaptureVideoOrientation.Portrait;
+       
         }
 
         public void SetupPreviewLayer()
@@ -173,20 +187,15 @@ namespace ClipperIOS
             previewLayer.Frame = View.Layer.Frame;
         }
 
-        public void CaptureOutput(AVCaptureOutput output, CMSampleBuffer buffer, AVCaptureConnection connection)
+        public void Capture()
         {
-            if (!takePicture)
-                return;
+            
+            var output = captureSession.Outputs[0];
 
-            var cvBuffer = buffer.GetImageBuffer();
-            var ciImage = new CIImage(cvBuffer);
-            var uiImage = new UIImage(ciImage);
-
-            DispatchQueue.MainQueue.DispatchAsync(() =>
-            {
-                postImageView.Image = uiImage;
-                takePicture = false;
-            });
+            captureSession.BeginConfiguration();
+           takePicture = true;
+           //WRITE NORM LOGIC
+            captureSession.CommitConfiguration();
         }
 
         public void SwitchCameraInput()
@@ -212,6 +221,54 @@ namespace ClipperIOS
 
             rotateCameraBtn.UserInteractionEnabled = true;
         }
+
+       public void ShowPostView(UIImage img)
+        {
+            Action act = () =>
+            {
+                var editController = Storyboard.InstantiateViewController("EditingPostController") as EditingPostViewController;
+                editController.images = new List<UIImage> { img };
+                editController.userId = userId;
+
+                takePicture = false;
+                ShowViewController(editController, this);
+            };
+            BeginInvokeOnMainThread(act);
+        }
+
+        private void DisposeSources()
+        {
+            IDisposable[] toDispose = { captureSession, previewLayer, videoOutput };
+
+            for(int i = 0; i < toDispose.Length; i++)
+            {
+                toDispose[i].Dispose();
+                toDispose[i] = null;
+            }
+        }
         #endregion
+    }
+
+    public class CameraOutput: AVCaptureVideoDataOutputSampleBufferDelegate
+    {
+        CameraViewController cameraController;
+
+        public CameraOutput(CameraViewController CameraController)
+        {
+            cameraController = CameraController;
+        }
+
+        public override void DidOutputSampleBuffer(AVCaptureOutput captureOutput, CMSampleBuffer sampleBuffer, AVCaptureConnection connection)
+        {
+            if (!cameraController.takePicture)
+                return;
+            var cvBuffer = sampleBuffer.GetImageBuffer();
+            var ciImage = new CIImage(cvBuffer);
+            var uiImage = new UIImage(ciImage);
+
+            cameraController.ShowPostView(uiImage);
+        }
+
+        
     }
 }
