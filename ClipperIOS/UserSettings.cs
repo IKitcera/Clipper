@@ -17,11 +17,7 @@ namespace ClipperIOS
         private static string StoragePermission = "storagepermission";
         private static string CameraPermission = "camerapermission";
         private static string StayLogged = "staylogged";
-     
-        public UserSettings()
-        {
-            //preferences = new NSUserDefaults();
-        }
+
         public void saveUserID(string value)
         {
             preferences.SetString(value, UserId);
@@ -52,29 +48,11 @@ namespace ClipperIOS
             preferences.SetBool(value, StayLogged);
             preferences.Synchronize();
         }
-        public string GetUserID()
-        {
-           return preferences.StringForKey(UserId);
-        }
-        public string GetUserLogin()
-        {
-            return preferences.StringForKey(UserLogin);
-        }
-        public string GetUserPassword()
-        {
-            return preferences.StringForKey(UserPassword);
-        }
-        public bool GetCameraPermission()
-        {
-            return preferences.BoolForKey(CameraPermission);
-        }
-        public bool GetStoragePermission()
-        {
-            return preferences.BoolForKey(StoragePermission);
-        }
-        public bool GetDoNotLogOut()
-        {
-            return preferences.BoolForKey(StayLogged);
-        }
+        public string GetUserID() => preferences.StringForKey(UserId);
+        public string GetUserLogin() => preferences.StringForKey(UserLogin);
+        public string GetUserPassword() => preferences.StringForKey(UserPassword);
+        public bool GetCameraPermission() => preferences.BoolForKey(CameraPermission);
+        public bool GetStoragePermission() => preferences.BoolForKey(StoragePermission);
+        public bool GetDoNotLogOut() => preferences.BoolForKey(StayLogged);
     }
 }

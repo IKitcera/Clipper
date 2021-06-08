@@ -117,8 +117,6 @@ namespace ClipperIOS
             mainController.Settings = ((MainTabNavController)ParentViewController).Settings;
 
             ShowViewController(mainController, this);
-          
         }
     }
-
 }

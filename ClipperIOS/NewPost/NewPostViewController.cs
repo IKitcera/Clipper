@@ -25,6 +25,8 @@ namespace ClipperIOS
         { 
             
         }
+
+        #region Lifecycle
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -52,6 +54,19 @@ namespace ClipperIOS
                 Init();
             }
         }
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            Init();
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            Reset();
+
+            base.ViewDidDisappear(animated);
+        }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
@@ -77,8 +92,11 @@ namespace ClipperIOS
                 }
             }
         }
+        #endregion
 
-        public void Init()
+        #region Methods
+
+        private void Init()
         {
             var options = new PHFetchOptions();
             options.SortDescriptors = new NSSortDescriptor[]{
@@ -86,7 +104,6 @@ namespace ClipperIOS
             var fetchResults = PHAsset.FetchAssets(PHAssetMediaType.Image, options);
 
             libraryPhotos.DataSource = new CollectionViewSource(fetchResults, this);
-          
 
             selectedImgs = new List<UIImage>();
             selectedUrl = new List<string>();
@@ -117,15 +134,15 @@ namespace ClipperIOS
             doneManyBtn.TouchUpInside += (sender, e) => PerformSegue("PostEditing", this);
             takePictureBtn.TouchUpInside += (sender, e) => PerformSegue("CameraCapture", this);
         }
+
         public void Reset()
         {
-
             selectedImgs = new List<UIImage>();
             selectedUrl = new List<string>();
 
             selectOne = true;
             takePictureBtn.Hidden = false;
-            doneManyBtn.Hidden = false;
+            doneManyBtn.Hidden = true;
 
             ((CollectionViewSource)libraryPhotos.DataSource).UncheckAll();
         }
@@ -134,12 +151,7 @@ namespace ClipperIOS
         {
             if (selectOne)
             {
-                if (selectedImgs.Count > 0)
-                {
-                     selectedImgs = new List<UIImage>() { image};
-                }
-
-                selectedImgs.Add(image);
+                selectedImgs = new List<UIImage>() { image};
 
                 PerformSegue("PostEditing", this);
             }
@@ -165,7 +177,7 @@ namespace ClipperIOS
         }
     }
 
-
+    #endregion
 
     public class CollectionViewSource : UICollectionViewDataSource
     {
@@ -213,8 +225,6 @@ namespace ClipperIOS
 
             cell.Frame = new CGRect(offsetX, ((int)(indexPath.Row / 3.0))*a, a, a);
 
-            NSDictionary inf = new NSDictionary();
-
             imageMngr.RequestImageForAsset(
                 (PHAsset)result[(int)indexPath.Row],
                 new CoreGraphics.CGSize(2000, 2000),
@@ -224,10 +234,8 @@ namespace ClipperIOS
                 {
                     cell.img.ContentMode = UIViewContentMode.ScaleAspectFill;
                     cell.img.Image = img;
-                    inf = info;
                 });
 
-           
             cell.imgBtn.TouchUpInside += (sender, e) => postViewController.PreparePost(cell.img.Image, cell.check);
             
             cells.Add(cell);

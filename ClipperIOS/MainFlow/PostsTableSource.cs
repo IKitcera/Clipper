@@ -56,6 +56,7 @@ namespace ClipperIOS
             cell.scroll.UserInteractionEnabled = true;
             cell.scroll.ScrollEnabled = true;
 
+
             foreach (var img in images)
             {
                 var iv = new UIImageView(new CoreGraphics.CGRect(cell.scroll.VisibleSize.Width * (nfloat)i, 0, cell.scroll.VisibleSize.Width, cell.scroll.VisibleSize.Height));
@@ -67,21 +68,7 @@ namespace ClipperIOS
 
                 i++;
             }
-            /*
-            foreach (var img in post.Images)
-            { 
-                var image = ImageProcessing..ImgFromUrl(img);
 
-                var iv = new UIImageView(new CoreGraphics.CGRect(cell.scroll.VisibleSize.Width * (nfloat)i, 0, cell.scroll.VisibleSize.Width, cell.scroll.VisibleSize.Height));
-   
-                iv.ContentMode = UIViewContentMode.ScaleAspectFit;
-                iv.Image = image;
-                iv.BackgroundColor = UIColor.White;
-                cell.scroll.AddSubview(iv);
-
-                i++;
-            }
-            */
             cell.pageControl.Pages = post.Images.Count;
       
           

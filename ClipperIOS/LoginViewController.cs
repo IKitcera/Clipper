@@ -17,10 +17,7 @@ namespace ClipperIOS
 
         public override void DidReceiveMemoryWarning()
         {
-            // Releases the view if it doesn't have a superview.
             base.DidReceiveMemoryWarning();
-
-            // Release any cached data, images, etc that aren't in use.
         }
 
         #region View lifecycle
@@ -36,7 +33,6 @@ namespace ClipperIOS
             uEmail.EditingDidEndOnExit += (s, e) => ResignFirstResponder();
             uPass.EditingDidEndOnExit += (s, e) => ResignFirstResponder();
             errorLabel.Hidden = true;
-            // Perform any additional setup after loading the view, typically from a nib.
         }
 
         public override void ViewWillAppear(bool animated)
@@ -47,22 +43,9 @@ namespace ClipperIOS
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            /*
-           
-                if (settings.GetDoNotLogOut())
-                {
-                    if (settings.GetUserID() != "" || settings.GetUserID() != null)
-                    {
-                         PerformSegue("LoginSuccessful", this);
-                    }
-                    else
-                    {
-            */
-                        uEmail.Text = settings.GetUserLogin();
-                        uPass.Text = settings.GetUserPassword();
-                 //   }
-            //    }
-            
+
+            uEmail.Text = settings.GetUserLogin();
+            uPass.Text = settings.GetUserPassword();
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -74,8 +57,8 @@ namespace ClipperIOS
         {
             base.ViewDidDisappear(animated);
         }
-
         #endregion
+
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
             base.PrepareForSegue(segue, sender);
@@ -86,6 +69,7 @@ namespace ClipperIOS
                     mainController.Settings = settings;
 
         }
+
         #region Methods
         private void LoginClick()
         {
@@ -112,9 +96,6 @@ namespace ClipperIOS
                     errorLabel.Hidden = false;
             }
         }
-       
-       
         #endregion
     }
-
 }

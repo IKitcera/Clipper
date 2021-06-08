@@ -79,17 +79,6 @@ namespace ClipperIOS
                 table.ScrollToRow(indexPath, UITableViewScrollPosition.Top, false);
         }
 
-        /*
-        public void ShowUsersProfile(string userId)
-        {
-            var profileControler = Storyboard.InstantiateViewController("ProfileController") as ProfileViewController;
-            profileControler.userId = userId;
-            profileControler.isOwn = false;
-
-            ShowViewController(profileControler, this);
-        }
-        */
-
         public void ShowUsersProfile(string userId)
         {
             var mainController = Storyboard.InstantiateViewController("MainNav") as MainTabNavController;

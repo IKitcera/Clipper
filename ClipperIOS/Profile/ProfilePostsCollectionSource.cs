@@ -20,9 +20,7 @@ namespace ClipperIOS
         public ProfilePostsCollectionSource(List<string> urls, ProfileViewController profileController)
         {
             images = ImageProcessing.LoadImages(urls).Result;
-
             owner = profileController;
-          
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -64,6 +62,5 @@ namespace ClipperIOS
 
             return cell;
         }
-
     }
 }

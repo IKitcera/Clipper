@@ -29,20 +29,23 @@ namespace ClipperIOS
         {
             base.ViewDidLoad();
 
-            scroll.Frame = new CGRect(0, 0, View.Frame.Width, View.Frame.Height);
+            scroll.Frame = new CGRect(0, 0, View.Frame.Width, View.Frame.Height*0.6f);
 
             foreach (var img in images)
             {
                 var imgView = new UIImageView(
-                    new CGRect(scroll.VisibleSize.Width * images.IndexOf(img), 0,
-                        scroll.VisibleSize.Width, scroll.VisibleSize.Height)
+                    new CGRect(scroll.Frame.Width * images.IndexOf(img), 0,
+                        scroll.Frame.Width, scroll.Frame.Height)
                     );
-                imgView.ContentMode = UIViewContentMode.ScaleAspectFit;
+                imgView.ContentMode = UIViewContentMode.ScaleAspectFit ;
                 imgView.Image = img;
                 scroll.AddSubview(imgView);
             }
 
-            scroll.ContentSize = new CGSize(scroll.Frame.Width, scroll.Frame.Height);
+            scroll.ContentSize = new CGSize(scroll.Frame.Width*images.Count, scroll.Frame.Height);
+
+            if (images.Count == 1)
+                scroll.ScrollEnabled = false;
 
             pageCntrl.Pages = images.Count;
             
@@ -51,7 +54,7 @@ namespace ClipperIOS
                 var sc = s as UIScrollView;
                 var offset = sc.ContentOffset.X;
 
-                pageCntrl.CurrentPage = pageCntrl.Pages - ((int)Math.Round(sc.ContentSize.Width / (offset + sc.VisibleSize.Width)));
+                pageCntrl.CurrentPage = pageCntrl.Pages - ((int)Math.Round(sc.ContentSize.Width / (offset + sc.Frame.Width)));
             };
 
             txtBelow.EditingDidEndOnExit += (sender, e) => ResignFirstResponder();
@@ -63,7 +66,6 @@ namespace ClipperIOS
 
             postBtn.TouchUpInside += (sender, e) => Post();
         }
-
 
         private async void Post()
         {
@@ -87,24 +89,40 @@ namespace ClipperIOS
                 Message = "Successfully posted!";
             else
                 Message = "An error was occured";
+
+            var presentingController = PresentingViewController;
+            var root = presentingController as MainTabNavController;
+
+            if (root == null)
+            {
+                //dismissParentControllerAction = new Action(()=> PresentingViewController.DismissViewController(false, null));
+
+                var fatherRoot = presentingController.PresentingViewController as MainTabNavController;
+                DismissViewController(false, () =>
+                {
+                    fatherRoot.SelectedViewController = fatherRoot.ViewControllers
+                                                        .Where(controller => controller is MainFlowViewController)
+                                                        .FirstOrDefault();
+                    presentingController.DismissViewController(false, null);
+                });
+            }
+            else
+            {
+                var newPostViewController = root.SelectedViewController as NewPostViewController;
+                newPostViewController.Reset();
+                root.SelectedViewController = root.ViewControllers.Where(vc => vc is MainFlowViewController).FirstOrDefault();
+
+                var profileController = root.ViewControllers.Where(vc => vc is ProfileViewController).FirstOrDefault() as ProfileViewController;
+
+                profileController.Settings ??= root.Settings;
+
+                (this as UIViewController).ShowToast(Message, 3);
+
+                await profileController.UpdateCollectionInBackground();
+                var dismissParentControllerAction = new Action(() => newPostViewController.DismissViewController(false, null));
+                DismissViewController(false, dismissParentControllerAction);
+            }
           
-            var root = ((MainTabNavController)PresentingViewController);
-            var newPostViewController = root.SelectedViewController as NewPostViewController;
-
-            newPostViewController.Reset();
-            root.SelectedViewController = root.ViewControllers.Where(vc => vc is MainFlowViewController).FirstOrDefault();
-
-            var profileController = root.ViewControllers.Where(vc => vc is ProfileViewController).FirstOrDefault() as ProfileViewController;
-
-            profileController.Settings ??= root.Settings;
-
-            (this as UIViewController).ShowToast(Message, 3);
-
-            
-
-            await profileController.UpdateCollectionInBackground();
-
-            DismissViewController(false, () => newPostViewController.DismissViewController(false, null));
         }
     }
 }

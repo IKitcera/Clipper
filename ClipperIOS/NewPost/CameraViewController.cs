@@ -27,12 +27,9 @@ namespace ClipperIOS
         private AVCaptureInput backInput;
 
         private AVCaptureVideoPreviewLayer previewLayer;
+        private AVCaptureStillImageOutput imageOutput;
 
-        private AVCaptureVideoDataOutput videoOutput;
-
-       
         bool backCameraOn;
-
         public CameraViewController (IntPtr handle) : base (handle)
 		{
 		}
@@ -42,11 +39,10 @@ namespace ClipperIOS
         {
             base.ViewDidLoad();
 
-            
-        //    SetupView();
             backBtn.TouchUpInside += (sender, e) => DismissViewController(false, null);
             takePictureBtn.TouchUpInside += (sender, e) => Capture();
             rotateCameraBtn.TouchUpInside += (sender, e) => SwitchCameraInput();
+            lightBtn.TouchUpInside += (sender, e) => SwitchFlashIfCould();
          }
 
         public override void ViewWillAppear(bool animated)
@@ -63,17 +59,17 @@ namespace ClipperIOS
                 notAvailableLabel.Hidden = false;
         }
 
-        public override void ViewDidDisappear(bool animated)
+        public override void ViewWillDisappear(bool animated)
         {
-            base.ViewDidDisappear(animated);
-
-            DisposeSources();
+            if(captureSession.Running)
+                captureSession.StopRunning();
+            base.ViewWillDisappear(animated);
         }
         #endregion
 
         #region Methods
 
-        public bool CheckPermission()
+        private bool CheckPermission()
         {
             var permission = AVCaptureDevice.GetAuthorizationStatus(AVAuthorizationMediaType.Video);
 
@@ -95,7 +91,7 @@ namespace ClipperIOS
             return returningPermission;
         }
 
-        public void SetupAndStartCameraSession()
+        private void SetupAndStartCameraSession()
         {
             DispatchQueue.DefaultGlobalQueue.DispatchAsync(() =>
             {
@@ -118,7 +114,7 @@ namespace ClipperIOS
 
             });
         }
-        public void SetupInputs()
+        private void SetupInputs()
         {
 
             frontCamera = AVCaptureDevice.GetDefaultDevice(AVCaptureDeviceType.BuiltInWideAngleCamera, AVMediaTypes.Video, AVCaptureDevicePosition.Front);
@@ -142,63 +138,84 @@ namespace ClipperIOS
                     backInput = input;
                 }
 
-                if (captureSession.CanAddInput(frontInput))
-                {
-                    captureSession.AddInput(frontInput);
-                    backCameraOn = false;
-                }
-                    
-
-                 if (captureSession.CanAddInput(backInput))
+                if (captureSession.CanAddInput(backInput))
                 {
                      captureSession.AddInput(backInput);
                     backCameraOn = true;
                 }
-                   
+                else
+                {
+                    if (captureSession.CanAddInput(frontInput))
+                    {
+                        captureSession.AddInput(frontInput);
+                        backCameraOn = false;
+                    }
+                }
             }
             catch 
             {
-                notAvailableLabel.Hidden = false;
+                BeginInvokeOnMainThread(() =>
+                {
+                    notAvailableLabel.Hidden = false;
+                    lightBtn.Enabled = false;
+                    rotateCameraBtn.Enabled = false;
+                    takePictureBtn.Enabled = false;
+                });
             }
         }
 
-        public void SetupOutput()
+        private void SetupOutput()
         {
-            videoOutput = new AVCaptureVideoDataOutput();
-            var camOutput = new CameraOutput(this);
+            imageOutput = new AVCaptureStillImageOutput();
 
-            var videoQueue = new DispatchQueue("videoQueue"); //qos : .userInteractive
-       
-            videoOutput.SetSampleBufferDelegateQueue(camOutput, videoQueue);
-
-            if (captureSession.CanAddOutput(videoOutput))
-                captureSession.AddOutput(videoOutput);
+            if (captureSession.CanAddOutput(imageOutput))
+                captureSession.AddOutput(imageOutput);
             else
                 notAvailableLabel.Hidden = false;
-
-            videoOutput.Connections[0].VideoOrientation = AVCaptureVideoOrientation.Portrait;
-       
         }
 
-        public void SetupPreviewLayer()
+        private void SetupPreviewLayer()
         {
             previewLayer = new AVCaptureVideoPreviewLayer(captureSession);
-            View.Layer.InsertSublayer(previewLayer, 0);
+
+            if(View.Layer.Sublayers[0].GetType() != previewLayer.GetType())
+                View.Layer.InsertSublayer(previewLayer, 0);
+            else
+                View.Layer.ReplaceSublayer(View.Layer.Sublayers[0], previewLayer);
+
             previewLayer.Frame = View.Layer.Frame;
         }
 
-        public void Capture()
+        private void Capture()
         {
-            
-            var output = captureSession.Outputs[0];
-
-            captureSession.BeginConfiguration();
            takePicture = true;
-           //WRITE NORM LOGIC
-            captureSession.CommitConfiguration();
+
+
+            var connection = imageOutput.ConnectionFromMediaType(new NSString(AVMediaType.Video.ToString()));
+
+            var orientation = (int)UIDevice.CurrentDevice.Orientation;
+            
+            connection.VideoOrientation = (AVCaptureVideoOrientation)orientation;
+
+            imageOutput.CaptureStillImageAsynchronously(connection, (buff, error) =>
+            {
+                if (error == null)
+                {
+                    var imageData = AVCaptureStillImageOutput.JpegStillToNSData(buff);
+                    NSDictionary metaData = buff.GetAttachments(CMAttachmentMode.ShouldPropagate);
+
+                    var image = new UIImage(imageData);
+
+                    if (image != null)
+                    {
+                        ShowPostView(image);
+                    }
+                }
+            });
+
         }
 
-        public void SwitchCameraInput()
+        private void SwitchCameraInput()
         {
             rotateCameraBtn.UserInteractionEnabled = false ;
             captureSession.BeginConfiguration();
@@ -215,16 +232,83 @@ namespace ClipperIOS
                 captureSession.AddInput(backInput);
                 backCameraOn = true;
             }
-            videoOutput.Connections[0].VideoOrientation = AVCaptureVideoOrientation.Portrait;
-
             captureSession.CommitConfiguration();
 
             rotateCameraBtn.UserInteractionEnabled = true;
         }
 
-       public void ShowPostView(UIImage img)
+        private void SwitchFlashIfCould()
         {
-            Action act = () =>
+            if (backCameraOn)
+            {
+                if (!CheckCameraOnFlashExistanceAndSwitch(backCamera))
+                {
+                    (this as UIViewController).ShowToast("Could not find the flashlight", 3);
+                }
+                else
+                {
+                    var error = new NSError();
+                    captureSession.RemoveInput(backInput);
+
+                    backInput = new AVCaptureDeviceInput(backCamera, out error);
+                    if (captureSession.CanAddInput(backInput))
+                        captureSession.AddInput(backInput);
+                }
+            }
+            else
+            {
+                if (!CheckCameraOnFlashExistanceAndSwitch(frontCamera))
+                {
+                    (this as UIViewController).ShowToast("Could not find the flashlight", 3);
+                }
+                else
+                {
+                    var error = new NSError();
+                    captureSession.RemoveInput(frontInput);
+
+                    frontInput = new AVCaptureDeviceInput(frontCamera, out error);
+                    if (captureSession.CanAddInput(frontInput))
+                        captureSession.AddInput(frontInput);
+                }
+            }
+        }
+
+        private bool CheckCameraOnFlashExistanceAndSwitch(AVCaptureDevice camera)
+        {
+            if (camera.HasFlash)
+             {
+                    try
+                    {
+                        NSError error = new NSError();
+                        camera.LockForConfiguration(out error);
+
+                        var currentFlashMode = (int)camera.FlashMode;
+                        var modesCount = Enum.GetNames(typeof(AVCaptureFlashMode)).Length;
+
+                        if (currentFlashMode + 1 < modesCount)
+                            camera.FlashMode = (AVCaptureFlashMode)(currentFlashMode + 1);
+                        else
+                            camera.FlashMode = (AVCaptureFlashMode)0;
+
+                        camera.UnlockForConfiguration();
+
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                    finally
+                    {
+                        camera.UnlockForConfiguration();
+                    }
+            }
+                return false;
+        }
+
+       private void ShowPostView(UIImage img)
+        {
+            BeginInvokeOnMainThread(() =>
             {
                 var editController = Storyboard.InstantiateViewController("EditingPostController") as EditingPostViewController;
                 editController.images = new List<UIImage> { img };
@@ -232,13 +316,16 @@ namespace ClipperIOS
 
                 takePicture = false;
                 ShowViewController(editController, this);
-            };
-            BeginInvokeOnMainThread(act);
+            });
         }
 
+        /*
         private void DisposeSources()
         {
-            IDisposable[] toDispose = { captureSession, previewLayer, videoOutput };
+            IDisposable[] toDispose =
+            { captureSession,
+              previewLayer,
+              imageOutput };
 
             for(int i = 0; i < toDispose.Length; i++)
             {
@@ -246,29 +333,7 @@ namespace ClipperIOS
                 toDispose[i] = null;
             }
         }
+        */
         #endregion
-    }
-
-    public class CameraOutput: AVCaptureVideoDataOutputSampleBufferDelegate
-    {
-        CameraViewController cameraController;
-
-        public CameraOutput(CameraViewController CameraController)
-        {
-            cameraController = CameraController;
-        }
-
-        public override void DidOutputSampleBuffer(AVCaptureOutput captureOutput, CMSampleBuffer sampleBuffer, AVCaptureConnection connection)
-        {
-            if (!cameraController.takePicture)
-                return;
-            var cvBuffer = sampleBuffer.GetImageBuffer();
-            var ciImage = new CIImage(cvBuffer);
-            var uiImage = new UIImage(ciImage);
-
-            cameraController.ShowPostView(uiImage);
-        }
-
-        
     }
 }
