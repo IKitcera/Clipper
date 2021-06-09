@@ -73,7 +73,8 @@ namespace ClipperA
             {
                  Manifest.Permission.WriteExternalStorage,
                  Manifest.Permission.ReadExternalStorage,
-                 Manifest.Permission.Camera
+                 Manifest.Permission.Camera,
+                 Manifest.Permission.Internet
             };
            
            ActivityCompat.RequestPermissions(this, Permissions, PERMISSION_ALL); 

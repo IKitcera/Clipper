@@ -92,7 +92,7 @@ namespace Clipper.Services
                 },
                new Profile {
                     Id = Guid.NewGuid().ToString(), UserId = users[1].Id,
-                    SubscribedId = new List<string>() { users[1].Id },
+                    SubscribedId = new List<string>() { users[0].Id },
                     SubscribersId = new List<string>(){ users[3].Id  },
                     TextAbout = "Hi, I`m user 2",
                     Avatar = "https://www.w3schools.com/howto/img_avatar.png",
