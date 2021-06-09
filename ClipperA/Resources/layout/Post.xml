@@ -81,9 +81,10 @@
             <TextView
                 android:layout_width="40dp"
                 android:layout_height="30dp"
+                 app:autoSizeMinTextSize="26dp"
                 android:textAlignment="center"
                 android:id="@+id/reactionDown"
-                android:paddingLeft="100dp" />
+                />
         </LinearLayout>
     
         <!--comment-->
