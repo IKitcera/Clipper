@@ -28,7 +28,7 @@ namespace Clipper.Services
             {
                 new Profile {
                     Id = Guid.NewGuid().ToString(), UserId = users[0].Id,
-                    SubscribedId= new List<string>() {users[2].Id, users[1].Id},
+                    SubscribedId= new List<string>() {users[2].Id, users[1].Id, users[3].Id},
                     SubscribersId = new List<string>(){ users[3].Id  },
                     TextAbout = "Hi, I`m user 1",
                     Avatar = "",
@@ -134,14 +134,35 @@ namespace Clipper.Services
                             CreatingTime = DateTime.Now,
                             Reactions = new  List<Reaction>(){ Reaction.Positive, Reaction.Negative }
                         }
-                        
+
                     }
                 },new Profile {
                     Id = Guid.NewGuid().ToString(), UserId = users[3].Id,
+                    Avatar = "",
                     SubscribedId= new List<string>() {users[2].Id, users[1].Id},
-                    SubscribersId = new List<string>(){ users[3].Id  },
+                    SubscribersId = new List<string>(){ users[3].Id, users[1].Id  },
                     TextAbout = "Hi, I`m user 4",
                     PhotoPosts = new List<PhotoPost>()
+                    {
+                        new PhotoPost{Id = Guid.NewGuid().ToString(),
+                        UserId = "4444",
+                        Images = new List<string>{"https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg"},
+                        TextBelow = " ",
+                        Comments = new List<Comment>(),
+                        CreatingTime = (DateTime.Now - TimeSpan.FromDays(1)),
+                        Reactions = new List<Reaction>()
+                        },
+                        new PhotoPost{Id = Guid.NewGuid().ToString(),
+                        UserId = "4444",
+                        Images = new List<string>
+                        { "https://1.bp.blogspot.com/-0O-qKxa2or4/X0qb-7NxtKI/AAAAAAAAdsw/CIfYnxI5Pg4u_68S2Dk49bpBN2KEoh-LwCLcBGAsYHQ/s1600/sad%2Bimages%2Bfor%2Bwhatsapp%2Bdp%2B%2B%252814%2529.jpg"
+                        },
+                        TextBelow = " Sad",
+                        Comments = new List<Comment>{ new Comment { UserID = "1111", Id = Guid.NewGuid().ToString(), Text = "Why are you sad?"} },
+                        CreatingTime = (DateTime.Now - TimeSpan.FromDays(2)),
+                        Reactions = new List<Reaction>{Reaction.Positive, Reaction.Positive, Reaction.Negative }
+                        }
+                    }
                 }
             };
             posts = new List<PhotoPost>();

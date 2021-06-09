@@ -24,7 +24,7 @@ namespace Clipper.Services
             var result = from profiles in store.Profiles
                          join subsribings in currentProfile.SubscribedId
                          on profiles.UserId equals subsribings
-                         select profiles.PhotoPosts.OrderBy(post => post.CreatingTime).ToList();
+                         select profiles.PhotoPosts.OrderByDescending(post => post.CreatingTime).ToList();
 
             List<PhotoPost> resultList = new List<PhotoPost>();
             foreach(var firstD in result)
@@ -34,7 +34,7 @@ namespace Clipper.Services
                     resultList.Add(secondD);
                 }
             }
-            resultList.Reverse();
+            //resultList.
             return resultList;
         }
         public List<string> SetAvtrs(List<PhotoPost> posts)

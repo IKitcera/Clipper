@@ -340,7 +340,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xqL-mO-rRa">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" directionalLockEnabled="YES" bounces="NO" alwaysBounceVertical="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xqL-mO-rRa">
                                 <rect key="frame" x="0.0" y="32" width="414" height="781"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <prototypes>
@@ -432,6 +432,7 @@
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         </view>
                                                     </subviews>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="MRA-FM-JCP" firstAttribute="centerX" secondItem="3su-3W-IAu" secondAttribute="centerX" id="7Hx-bX-Fme"/>
                                                         <constraint firstItem="jew-pY-doB" firstAttribute="leading" secondItem="MRA-FM-JCP" secondAttribute="trailing" constant="37" id="7Is-q4-kWl"/>
@@ -475,6 +476,7 @@
                                                 <constraint firstItem="MrE-3j-T3p" firstAttribute="leading" secondItem="ihk-YR-YNV" secondAttribute="leading" id="qop-Fr-Bp0"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="aBtn" destination="ihk-YR-YNV" id="Z2Y-pw-o7c"/>
                                             <outlet property="avtr" destination="MrE-3j-T3p" id="T9x-gx-iwI"/>
