@@ -3,12 +3,15 @@ using Android.Content;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidX.Core.Content;
 using AndroidX.ViewPager.Widget;
 using Bumptech.Glide;
 using Clipper.Models;
+using Clipper.Services;
 using Clipper.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Fragment = AndroidX.Fragment.App.Fragment;
 
 namespace ClipperA
@@ -19,9 +22,12 @@ namespace ClipperA
         List<string> avtrs;
         List<string> nicks;
         Fragment context;
-
+        MainFlowActivityProcess reactionService;
         public event Action<string> ItemClick;
-        Action<string> listener;
+        public event Action<ReactionItem> LeftReactionClick;
+
+        Action<string> avtrImageClick;
+        Action<ReactionItem> leftReactionClick;
         public HomeAdapter(Fragment context, HomeViewModel home) : base()
         {
             this.context = context;
@@ -30,7 +36,10 @@ namespace ClipperA
             avtrs = home.UsersAvatars;
             nicks = home.UsersNames;
 
-            listener = OnClick;
+            avtrImageClick = OnClick;
+            leftReactionClick = OnClick;
+
+            reactionService = new MainFlowActivityProcess(posts);
         }
         public override PhotoPost this[int position] => posts[position];
 
@@ -50,7 +59,7 @@ namespace ClipperA
 
             avtr.Click += (sender, e) =>
             {
-                listener(post.UserId);
+                avtrImageClick(post.UserId);
             };
 
             if (avtrs[position] != "")
@@ -70,10 +79,53 @@ namespace ClipperA
             viewPager.Adapter = adapter;
 
             view.FindViewById<TextView>(Resource.Id.cmnt).Text = post.Comments.Count.ToString();
-            view.FindViewById<TextView>(Resource.Id.reactionUp).Text = post.Reactions.FindAll(r => r == Reaction.Positive).Count.ToString();
-            view.FindViewById<TextView>(Resource.Id.reactionDown).Text = post.Reactions.FindAll(r => r == Reaction.Negative).Count.ToString();
+
+
+            var likeImageView = view.FindViewById<ImageView>(Resource.Id.like);
+            likeImageView.Clickable = true;
+            likeImageView.Click += (sender, e) =>
+            {
+                leftReactionClick(new ReactionItem { Id = Guid.NewGuid().ToString(), PostId = post.Id, UserLeftedId = (context as MainFlowFragment).userId, Reaction = Reaction.Positive });;
+            };
+
+            view.FindViewById<TextView>(Resource.Id.reactionUp).Text = post.Reactions.FindAll(r => r.Reaction == Reaction.Positive).Count.ToString();
+
+            var dislikeImageView = view.FindViewById<ImageView>(Resource.Id.dislike);
+            dislikeImageView.Clickable = true;
+            dislikeImageView.Click += (sender, e) =>
+            {
+                leftReactionClick(new ReactionItem { Id = Guid.NewGuid().ToString(), PostId = post.Id, UserLeftedId = (context as MainFlowFragment).userId, Reaction = Reaction.Negative });
+            };
+
+            var dislikeTextView = view.FindViewById<TextView>(Resource.Id.reactionDown);
+            dislikeTextView.Text = post.Reactions.FindAll(r => r.Reaction == Reaction.Negative).Count.ToString();
+
+
             view.FindViewById<TextView>(Resource.Id.txtBelow).Text = post.TextBelow;
             view.FindViewById<TextView>(Resource.Id.userName).Text = nicks[position];
+
+            var userReaction = post.Reactions.Where(r => r.UserLeftedId == (context as MainFlowFragment).userId).FirstOrDefault();
+
+            if (userReaction != null)
+            {
+                var color = ContextCompat.GetColor(context.Activity, Resource.Color.primary_dark_material_dark);
+
+                if(userReaction.Reaction == Reaction.Positive)
+                {
+                    // likeImageView.Drawable.SetTint(color);
+                    likeImageView.SetColorFilter(Android.Graphics.Color.Black);
+                }
+                else
+                {
+                    // dislikeImageView.Drawable.SetTint(color);
+                    dislikeImageView.SetColorFilter(Android.Graphics.Color.Black);
+                }
+            }
+            else
+            {
+                likeImageView.SetColorFilter(null);
+                dislikeImageView.SetColorFilter(null);
+            }
             return view;
         }
 
@@ -81,6 +133,14 @@ namespace ClipperA
         {
             if (ItemClick != null)
                 ItemClick(uId);
+        }
+
+        void OnClick(ReactionItem reaction)
+        {
+            if(reaction != null)
+            {
+                LeftReactionClick(reaction);
+            }
         }
     }
 

@@ -28,7 +28,7 @@ namespace Clipper.ViewModels
                 return false;
             photoPost.UserId = userId;
             photoPost.Comments = new List<Comment>();
-            photoPost.Reactions = new List<Reaction>();
+            photoPost.Reactions = new List<ReactionItem>();
             StorageService.GetStorage().Profiles.Where(p => p.UserId == userId).FirstOrDefault().PhotoPosts.Add(photoPost);
             return true;
         }

@@ -40,7 +40,6 @@ namespace Clipper.Services
                             TextBelow =  "photo...1",
                             Comments = new List<Comment>()  {  new Comment{Id = Guid.NewGuid().ToString(), Text = "Whoa", UserID = users[2].Id }  },
                             CreatingTime = DateTime.Now,
-                            Reactions = new  List<Reaction>(){ Reaction.Positive }
                         },
                         new PhotoPost {  Id = Guid.NewGuid().ToString(),
                               UserId ="1111",
@@ -48,16 +47,14 @@ namespace Clipper.Services
                             { "https://www.imagescanada.ca/wp-content/uploads/2019/03/Spectacular-Photos-of-Niagara-Falls-Casinos.jpg"     },
                             TextBelow = "#sl",
                             Comments = new List<Comment>()   {new Comment{Id = Guid.NewGuid().ToString(), Text = "well", UserID = users[2].Id }   },
-                             CreatingTime = DateTime.Now,
-                            Reactions = new List<Reaction>() { Reaction.Positive }
+                             CreatingTime = DateTime.Now
                         },
                         new PhotoPost{Id = Guid.NewGuid().ToString(),
                             UserId ="1111",
                             Images = new List<string>() {"https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"},
                             TextBelow =  "photo..3...",
                             Comments = new List<Comment>()  {  new Comment{Id = Guid.NewGuid().ToString(), Text = "Whoa", UserID = users[2].Id }  },
-                            CreatingTime = DateTime.Now,
-                            Reactions = new  List<Reaction>(){ Reaction.Positive }
+                            CreatingTime = DateTime.Now
                         },
                         new PhotoPost {  Id = Guid.NewGuid().ToString(),
                               UserId ="1111",
@@ -65,8 +62,7 @@ namespace Clipper.Services
                             { "https://st.depositphotos.com/1428083/2946/i/600/depositphotos_29460297-stock-photo-bird-cage.jpg"     },
                             TextBelow = "#sl2",
                             Comments = new List<Comment>()   {new Comment{Id = Guid.NewGuid().ToString(), Text = "well", UserID = users[2].Id }   },
-                             CreatingTime = DateTime.Now,
-                            Reactions = new List<Reaction>() { Reaction.Positive }
+                             CreatingTime = DateTime.Now
                         },
                           new PhotoPost {  Id = Guid.NewGuid().ToString(),
                               UserId ="1111",
@@ -74,8 +70,7 @@ namespace Clipper.Services
                             { "https://static-cse.canva.com/blob/140259/ComposeStunningImages7.jpg"     },
                             TextBelow = "photo..6",
                             Comments = new List<Comment>()   {new Comment{Id = Guid.NewGuid().ToString(), Text = "well", UserID = users[2].Id }   },
-                             CreatingTime = DateTime.Now,
-                            Reactions = new List<Reaction>() { Reaction.Positive }
+                             CreatingTime = DateTime.Now
                         },
                         new PhotoPost {Id = Guid.NewGuid().ToString(),
                         UserId = "1111",
@@ -85,8 +80,7 @@ namespace Clipper.Services
                         },
                         TextBelow = "wood landscape",
                             Comments = new List<Comment>() ,
-                             CreatingTime = DateTime.Now,
-                            Reactions = new List<Reaction>() { Reaction.Negative }
+                             CreatingTime = DateTime.Now
                         }
                     }
                 },
@@ -105,8 +99,7 @@ namespace Clipper.Services
                             "https://st3.depositphotos.com/12985790/17376/i/1600/depositphotos_173765156-stock-photo-woman-in-leather-boots.jpg"},
                             TextBelow =  "Boots...",
                             Comments = new List<Comment>() ,
-                            CreatingTime = DateTime.Now,
-                            Reactions = new  List<Reaction>(){ Reaction.Positive }
+                            CreatingTime = DateTime.Now
                         }
                     }
                 },
@@ -123,16 +116,14 @@ namespace Clipper.Services
                             Images = new List<string>() { "https://images.pexels.com/photos/235986/pexels-photo-235986.jpeg"},
                             TextBelow =  "Wall...",
                             Comments = new List<Comment>()  {  new Comment{Id = Guid.NewGuid().ToString(), Text = "Whoa", UserID = users[2].Id }  },
-                            CreatingTime = DateTime.Now,
-                            Reactions = new  List<Reaction>(){ Reaction.Positive }
+                            CreatingTime = DateTime.Now
                         },
                         new PhotoPost{Id = Guid.NewGuid().ToString(),
                         UserId = "3333",
                             Images = new List<string>() {"https://images.ctfassets.net/hrltx12pl8hq/pgYGuW2X3wHni2PG3dLV0/80a2008f53a645da1db3c1b5260fd3fd/hero_spring_6.jpg?fit=fill&w=800&h=450"},
                             TextBelow =  "leaves...",
                             Comments = new List<Comment>()  {  new Comment{Id = Guid.NewGuid().ToString(), Text = "Nice", UserID = users[2].Id }  },
-                            CreatingTime = DateTime.Now,
-                            Reactions = new  List<Reaction>(){ Reaction.Positive, Reaction.Negative }
+                            CreatingTime = DateTime.Now
                         }
 
                     }
@@ -149,8 +140,7 @@ namespace Clipper.Services
                         Images = new List<string>{"https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg"},
                         TextBelow = " ",
                         Comments = new List<Comment>(),
-                        CreatingTime = (DateTime.Now - TimeSpan.FromDays(1)),
-                        Reactions = new List<Reaction>()
+                        CreatingTime = (DateTime.Now - TimeSpan.FromDays(1))
                         },
                         new PhotoPost{Id = Guid.NewGuid().ToString(),
                         UserId = "4444",
@@ -159,12 +149,46 @@ namespace Clipper.Services
                         },
                         TextBelow = " Sad",
                         Comments = new List<Comment>{ new Comment { UserID = "1111", Id = Guid.NewGuid().ToString(), Text = "Why are you sad?"} },
-                        CreatingTime = (DateTime.Now - TimeSpan.FromDays(2)),
-                        Reactions = new List<Reaction>{Reaction.Positive, Reaction.Positive, Reaction.Negative }
+                        CreatingTime = (DateTime.Now - TimeSpan.FromDays(2))
                         }
                     }
                 }
             };
+
+            //Init random reactions
+            foreach (var profile in profiles)
+            { 
+                foreach(var post in profile.PhotoPosts)
+                {
+                    int reactedCount = new Random().Next(0,profiles.Count);
+
+                    post.Reactions = new List<ReactionItem>();
+                    
+                    while(reactedCount != 0)
+                    {
+                        int reactionInt = 0;
+
+                        var probability = new Random().NextDouble();
+                        if (probability <= 0.3)
+                            reactionInt = 1;
+                        var randomLefted = new Random().Next(0, profiles.Count);
+                        
+                        while(post.Reactions.Find(r => r.UserLeftedId == profiles[randomLefted].UserId) != null)
+                        {
+                            var temp = randomLefted;
+                            randomLefted = new Random().Next(0, profiles.Count);
+
+                            if (randomLefted == temp)
+                                continue;
+                        }
+
+                        post.Reactions.Add(new ReactionItem { Id = Guid.NewGuid().ToString(), PostId = post.Id, Reaction = (Reaction)reactionInt, UserLeftedId = profiles[randomLefted].UserId });
+
+                        reactedCount--;
+                    }
+                }
+            }
+
             posts = new List<PhotoPost>();
             var postsCompexArr = profiles.Select(p => p.PhotoPosts);
             foreach(var oneD in postsCompexArr)

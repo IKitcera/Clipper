@@ -12,13 +12,8 @@ namespace Clipper.Models
         public string UserId { get; set; }
         public List<string> Images { get; set; }
         public string TextBelow { get; set; }
-        public List<Reaction> Reactions { get; set; }
+        public List<ReactionItem> Reactions { get; set; }
         public List<Comment> Comments { get; set; }
         public DateTime CreatingTime { get; set; }
-    }
-    public enum Reaction
-    {
-        Positive,
-        Negative
     }
 }
